@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar - DinasCustom</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css"> <!-- Base styles -->
+    <link rel="stylesheet" href="css/auth.css"> <!-- Auth styles -->
+    <script src="js/guard.js"></script>
+</head>
+<body class="auth-body">
+
+    <div class="auth-container">
+        
+        <!-- Left Side: Form -->
+        <div class="auth-right">
+            <div class="auth-form-wrapper">
+                
+                <!-- Back Button -->
+                <a href="index.html" class="auth-back-btn"><i class="fa-solid fa-arrow-left"></i> Kembali ke Beranda</a>
+
+                <a href="index.html" class="auth-logo-mobile" id="authLogoMobile">Dinas<span>Custom.</span></a>
+
+                <div class="auth-header">
+                    <h2>Buat Akun Baru</h2>
+                    <p>Daftar untuk mempermudah proses pre-order Anda selanjutnya.</p>
+                </div>
+
+                <form class="auth-form" id="registerForm" autocomplete="off">
+                    <div class="form-group">
+                        <label for="name">Nama Lengkap</label>
+                        <input type="text" id="name" class="form-control" placeholder="Sesuai KTP/Tanda Pengenal" required autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="whatsapp">Nomor WhatsApp</label>
+                        <input type="tel" id="whatsapp" class="form-control" placeholder="Contoh: 081234567890" required autocomplete="off" maxlength="15">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Alamat Email</label>
+                        <input type="email" id="email" class="form-control" placeholder="Email aktif" required autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" class="form-control" placeholder="Minimal 8 karakter" required autocomplete="new-password" minlength="8">
+                        <i class="fa-regular fa-eye password-toggle" id="togglePassword1"></i>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirm-password">Konfirmasi Password</label>
+                        <input type="password" id="confirm-password" class="form-control" placeholder="Ulangi password" required autocomplete="new-password" minlength="8">
+                        <i class="fa-regular fa-eye password-toggle" id="togglePassword2"></i>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary auth-btn mt-4">Daftar Sekarang</button>
+                </form>
+
+                <div class="auth-footer">
+                    Sudah punya akun? <a href="login.html">Masuk di sini</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: Image (Flipped layout for variety) -->
+        <div class="auth-left" id="authLeftBg" style="background-image: linear-gradient(135deg, rgba(26, 35, 126, 0.85) 0%, rgba(55, 71, 79, 0.7) 100%), url('https://images.unsplash.com/photo-1543163521-1bf539c55dd2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');">
+            <div class="auth-left-content">
+                <a href="index.html" class="auth-logo" id="authLogoLeft">Dinas<span>Custom.</span></a>
+                <h1 class="auth-title">Bergabung Bersama Kami</h1>
+                <p class="auth-desc">Nikmati kemudahan memesan seragam dinas berkualitas tinggi dengan proses yang transparan, mudah, dan terpercaya.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Config & Script Autentikasi -->
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>

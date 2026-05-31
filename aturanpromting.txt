@@ -1,0 +1,4 @@
+jika nanti saya ingin mengubah suatu sistem yang error usahakan lakukan perintah yang saya berikan tanpa
+mengubah sistem yang sudah ada, dan jika saya ingin memodifikasi sistem yang sudah ada beritahu saya
+karena saya ingin tau cara kerjanya, dan usahakan ketika saya menyuruh membuat suatu sistem baru ikuti
+langkah yang sama dengan sistem yang sudah ada, dan selalu update log dari setiap perubahan sistem.

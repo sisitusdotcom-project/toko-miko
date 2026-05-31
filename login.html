@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masuk - DinasCustom</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css"> <!-- Base styles -->
+    <link rel="stylesheet" href="css/auth.css"> <!-- Auth styles -->
+    <script src="js/guard.js"></script>
+</head>
+<body class="auth-body">
+
+    <div class="auth-container">
+        
+        <!-- Left Side: Image -->
+        <div class="auth-left" id="authLeftBg">
+            <div class="auth-left-content">
+                <a href="index.html" class="auth-logo" id="authLogoLeft">Dinas<span>Custom.</span></a>
+                <h1 class="auth-title">Selamat Datang Kembali</h1>
+                <p class="auth-desc">Masuk untuk melacak status pesanan pre-order seragam dinas Anda atau untuk mengelola sistem bagi Administrator.</p>
+            </div>
+        </div>
+
+        <!-- Right Side: Form -->
+        <div class="auth-right">
+            <div class="auth-form-wrapper">
+                
+                <!-- Back Button -->
+                <a href="index.html" class="auth-back-btn"><i class="fa-solid fa-arrow-left"></i> Kembali ke Beranda</a>
+
+                <a href="index.html" class="auth-logo-mobile" id="authLogoMobile">Dinas<span>Custom.</span></a>
+
+                <div class="auth-header">
+                    <h2>Masuk Akun</h2>
+                    <p>Silakan masukkan kredensial Anda untuk melanjutkan.</p>
+                </div>
+
+                <form class="auth-form" id="loginForm" autocomplete="off">
+                    <div class="form-group">
+                        <label for="email">Alamat Email</label>
+                        <input type="email" id="email" class="form-control" placeholder="Contoh: budi@example.com" required autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" class="form-control" placeholder="Masukkan password" required autocomplete="new-password">
+                        <i class="fa-regular fa-eye password-toggle" id="togglePassword"></i>
+                    </div>
+
+                    <div class="auth-options">
+                        <label>
+                            <input type="checkbox" checked> Ingat Saya
+                        </label>
+                        <a href="#" class="forgot-password">Lupa Password?</a>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary auth-btn">Masuk</button>
+                </form>
+
+                <div class="auth-footer">
+                    Belum punya akun? <a href="register.html">Daftar di sini</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Script Autentikasi -->
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Akun - DinasCustom</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css"> <!-- Base styles -->
+    <link rel="stylesheet" href="css/profile.css"> <!-- Profile specific styles -->
+</head>
+<body class="profile-body bg-light">
+
+    <div class="profile-container">
+        <!-- Back Button -->
+        <a href="javascript:history.back()" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Kembali</a>
+
+        <div class="profile-card">
+            <!-- Header & Avatar -->
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <img src="https://ui-avatars.com/api/?name=Budi+Santoso&background=1A237E&color=fff&size=120" alt="Avatar">
+                    <button class="btn-edit-avatar"><i class="fa-solid fa-camera"></i></button>
+                </div>
+                <h2 class="profile-name">Budi Santoso</h2>
+                <p class="profile-role">Member</p>
+            </div>
+
+            <div class="profile-forms">
+                <!-- Form Ubah Data Diri -->
+                <div class="form-section">
+                    <h3><i class="fa-regular fa-id-card"></i> Informasi Pribadi</h3>
+                    <form action="#" method="POST" id="formPersonalInfo">
+                        <div class="form-group">
+                            <label>Nama Lengkap</label>
+                            <input type="text" id="profileNama" class="form-control" value="Budi Santoso">
+                        </div>
+                        <div class="form-group">
+                            <label>Alamat Email</label>
+                            <input type="email" id="profileEmail" class="form-control" value="budi.santoso@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Nomor WhatsApp</label>
+                            <input type="tel" id="profileWhatsapp" class="form-control" value="081234567890" maxlength="15">
+                        </div>
+                        <button type="button" class="btn btn-primary mt-2" id="btnSaveProfile">Simpan Perubahan</button>
+                    </form>
+                </div>
+
+                <hr class="divider">
+
+                <!-- Form Ubah Password -->
+                <div class="form-section">
+                    <h3><i class="fa-solid fa-lock text-success"></i> Keamanan & Password</h3>
+                    <form action="#" method="POST" id="formPassword">
+                        <div class="form-group">
+                            <label>Password Saat Ini</label>
+                            <input type="password" id="profileCurrentPassword" class="form-control" placeholder="Masukkan password saat ini">
+                        </div>
+                        <div class="form-group">
+                            <label>Password Baru</label>
+                            <input type="password" id="profileNewPassword" class="form-control" placeholder="Masukkan password baru">
+                        </div>
+                        <div class="form-group">
+                            <label>Konfirmasi Password Baru</label>
+                            <input type="password" id="profileConfirmPassword" class="form-control" placeholder="Ulangi password baru">
+                        </div>
+                        <button type="button" class="btn btn-outline-dark mt-2" id="btnSavePassword">Perbarui Password</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skrip Eksternal -->
+    <script src="js/guard.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html>

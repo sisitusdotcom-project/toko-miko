@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - DinasCustom</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css"> <!-- Base styles -->
+    <link rel="stylesheet" href="css/admin.css"> <!-- Admin specific styles -->
+    <!-- Proteksi Hak Akses -->
+    <script src="js/guard.js"></script>
+</head>
+<body class="admin-body">
+
+    <div class="admin-layout">
+        
+        <!-- Sidebar -->
+        <aside class="admin-sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="logo text-white" id="dynAdminBrand" style="display: flex; align-items: center; gap: 8px;">Dinas<span>Custom.</span></a>
+                <button class="mobile-toggle" id="closeSidebar"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div class="admin-profile">
+                <div class="admin-avatar">A</div>
+                <div class="admin-info">
+                    <strong>Admin Utama</strong>
+                    <span>Super Administrator</span>
+                </div>
+            </div>
+
+            <nav class="admin-nav">
+                <ul class="nav-menu">
+                    <li class="nav-title">MENU UTAMA</li>
+                    <li class="nav-item active" data-target="dashboard-section">
+                        <i class="fa-solid fa-chart-pie"></i> <span>Dashboard</span>
+                    </li>
+                    <li class="nav-item" data-target="po-section">
+                        <i class="fa-solid fa-clipboard-list"></i> <span>Manajemen PO</span>
+                    </li>
+                    <li class="nav-item" data-target="products-section">
+                        <i class="fa-solid fa-box"></i> <span>Manajemen Produk</span>
+                    </li>
+                    <li class="nav-item" data-target="users-section">
+                        <i class="fa-solid fa-users"></i> <span>Manajemen Akun</span>
+                    </li>
+                    <li class="nav-item" data-target="payment-section">
+                        <i class="fa-solid fa-file-invoice-dollar"></i> <span>Pembayaran</span>
+                        <span class="badge-count" id="notifPaymentBadge">0</span>
+                    </li>
+                    <li class="nav-item" data-target="event-section">
+                        <i class="fa-solid fa-tags"></i> <span>Event & Diskon</span>
+                    </li>
+                    <li class="nav-item" data-target="klien-section">
+                        <i class="fa-solid fa-building"></i> <span>Manajemen Instansi</span>
+                    </li>
+                    <li class="nav-item" data-target="testimoni-section">
+                        <i class="fa-solid fa-star"></i> <span>Manajemen Testimoni</span>
+                    </li>
+                    <li class="nav-item" data-target="tampilan-section">
+                        <i class="fa-solid fa-image"></i> <span>Pengaturan Tampilan</span>
+                    </li>
+                    <li class="nav-item" data-target="pengaturan-section">
+                        <i class="fa-solid fa-sliders"></i> <span>Ongkir, Bank &amp; WA</span>
+                    </li>
+                </ul>
+
+                <ul class="nav-menu bottom-menu">
+                    <li class="nav-title">PENGATURAN</li>
+                    <li class="nav-item">
+                        <a href="profile.html" style="display: flex; gap: 12px; width: 100%; color: inherit;"><i class="fa-solid fa-user-gear"></i> <span>Profil Saya</span></a>
+                    </li>
+                    <li class="nav-item text-danger logout-btn">
+                        <a href="#" style="display: flex; gap: 12px; width: 100%; color: inherit;"><i class="fa-solid fa-arrow-right-from-bracket"></i> <span>Keluar</span></a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Topbar Mobile -->
+            <div class="admin-topbar">
+                <button class="mobile-toggle text-primary" id="openSidebar"><i class="fa-solid fa-bars"></i></button>
+                <div class="date-display" id="currentDate">Senin, 15 Mei 2026</div>
+            </div>
+
+            <!-- 1. Dashboard Section -->
+            <section id="dashboard-section" class="content-section active">
+                <h2 class="page-title">Pusat Kendali</h2>
+                
+                <!-- Top Widgets -->
+                <div class="widget-grid">
+                    <div class="widget-card bg-primary-gradient">
+                        <div class="widget-info">
+                            <p>Total Pre-Order</p>
+                            <h3 id="countPO">0</h3>
+                        </div>
+                        <div class="widget-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+                    </div>
+                    <div class="widget-card bg-warning-gradient">
+                        <div class="widget-info">
+                            <p>Menunggu Verifikasi</p>
+                            <h3 id="countPending">0</h3>
+                        </div>
+                        <div class="widget-icon"><i class="fa-solid fa-hourglass-half"></i></div>
+                    </div>
+                    <div class="widget-card bg-danger-gradient">
+                        <div class="widget-info">
+                            <p>Ditolak</p>
+                            <h3 id="countPayment">0</h3>
+                        </div>
+                        <div class="widget-icon"><i class="fa-solid fa-xmark"></i></div>
+                    </div>
+                    <div class="widget-card bg-success-gradient">
+                        <div class="widget-info">
+                            <p>Disetujui / Selesai</p>
+                            <h3 id="countCompleted">0</h3>
+                        </div>
+                        <div class="widget-icon"><i class="fa-solid fa-check-double"></i></div>
+                    </div>
+                </div>
+
+                <!-- Simple Chart Placeholder -->
+                <div class="card-box mt-4">
+                    <h3 class="section-heading mb-3">Tren Pesanan Bulan Ini</h3>
+                    <div class="chart-container">
+                        <!-- Dynamic Chart using Chart.js -->
+                        <canvas id="poChart" style="width:100%; max-height:250px;"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Manajemen Pre-Order Section -->
+            <section id="po-section" class="content-section">
+                <h2 class="page-title">Verifikasi Pre-Order</h2>
+                
+                <div class="card-box">
+                    <div class="table-toolbar">
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="searchPOInput" placeholder="Cari ID Order atau Nama...">
+                        </div>
+                        <div class="filter-box">
+                            <select class="filter-select" id="filterPOSelect">
+                                <option value="all">Semua Status</option>
+                                <option value="pending">Menunggu Konfirmasi Pesanan</option>
+                                <option value="menunggu verifikasi">Menunggu Konfirmasi Pembayaran</option>
+                                <option value="disetujui">Disetujui</option>
+                                <option value="selesai">Selesai</option>
+                                <option value="ditolak">Ditolak</option>
+                                <option value="dibatalkan">Dibatalkan</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive mt-3">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Tanggal</th>
+                                    <th>ID Order</th>
+                                    <th>Pelanggan</th>
+                                    <th>Produk</th>
+                                    <th>Harga Total</th>
+                                    <th>Target Selesai</th>
+                                    <th>Status</th>
+                                    <th class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="poTableBody">
+                                <tr>
+                                    <td colspan="8" class="text-center py-4">
+                                        <i class="fa-solid fa-spinner fa-spin text-primary" style="font-size: 2rem;"></i>
+                                        <p class="mt-2 text-muted">Memuat data pesanan...</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div style="text-align: right; margin-top: 15px;">
+                        <button class="btn btn-danger" onclick="deleteAllPO()"><i class="fa-solid fa-trash-can"></i> Hapus Semua Data PO</button>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- 2.5 Manajemen Produk Section -->
+            <section id="products-section" class="content-section">
+                <div class="flex-between">
+                    <h2 class="page-title">Manajemen Produk</h2>
+                    <button class="btn btn-primary btn-sm" onclick="openProductModal()"><i class="fa-solid fa-plus"></i> Tambah Produk</button>
+                </div>
+                
+                <div class="card-box mt-3">
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Gambar</th>
+                                    <th>Kategori</th>
+                                    <th>Nama Produk</th>
+                                    <th>Harga Asli</th>
+                                    <th>Ukuran</th>
+                                    <th>Badge</th>
+                                    <th class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productsTableBody">
+                                <tr>
+                                    <td colspan="7" class="text-center py-4">
+                                        <i class="fa-solid fa-spinner fa-spin text-primary" style="font-size: 2rem;"></i>
+                                        <p class="mt-2 text-muted">Memuat data produk...</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2.6 Manajemen Akun Section -->
+            <section id="users-section" class="content-section">
+                <h2 class="page-title">Manajemen Akun Pengguna</h2>
+                
+                <div class="card-box">
+                    <div class="table-toolbar">
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" placeholder="Cari Nama atau Email...">
+                        </div>
+                    </div>
+
+                    <div class="table-responsive mt-3">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Tanggal Daftar</th>
+                                    <th>Nama Lengkap</th>
+                                    <th>Nomor WhatsApp</th>
+                                    <th>Email</th>
+                                    <th class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <tr>
+                                    <td colspan="5" class="text-center py-4">
+                                        <i class="fa-solid fa-spinner fa-spin text-primary" style="font-size: 2rem;"></i>
+                                        <p class="mt-2 text-muted">Memuat data pengguna...</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Manajemen Pembayaran Section -->
+            <section id="payment-section" class="content-section">
+                <div class="flex-between">
+                    <h2 class="page-title">Verifikasi Pembayaran</h2>
+                </div>
+                
+                <!-- Empty State -->
+                <div id="paymentEmptyState" class="card-box text-center" style="display:none; padding: 60px 20px;">
+                    <i class="fa-solid fa-clipboard-check text-muted" style="font-size: 4rem; margin-bottom: 20px; opacity: 0.5;"></i>
+                    <h3 class="text-muted" style="margin-bottom: 10px;">Semua Pembayaran Telah Diverifikasi!</h3>
+                    <p class="text-muted">Saat ini tidak ada pesanan yang menunggu verifikasi bukti transfer dari Anda.</p>
+                </div>
+
+                <div class="card-box mt-3" id="paymentTableContainer">
+                    <div class="table-responsive">
+                        <table class="admin-table" id="paymentsTable">
+                            <thead>
+                                <tr>
+                                    <th>ID Order</th>
+                                    <th>Tanggal</th>
+                                    <th>Pelanggan</th>
+                                    <th>Nominal</th>
+                                    <th>Bukti Transfer</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="paymentsTableBody">
+                                <!-- Dynamic Content -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. Event & Diskon Section -->
+            <section id="event-section" class="content-section">
+                <div class="flex-between">
+                    <h2 class="page-title">Pengaturan Event & Diskon Global</h2>
+                </div>
+                
+                <div class="card-box mt-3" style="max-width: 600px;">
+                    <form id="eventForm">
+                        <div class="form-group mb-3">
+                            <label>Nama Event Promosi</label>
+                            <input type="text" class="form-control" id="eventNama" placeholder="Contoh: Promo Spesial Kemerdekaan">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Besaran Diskon (%)</label>
+                            <input type="number" class="form-control" id="eventDiskon" placeholder="Contoh: 10" min="0" max="100">
+                            <small class="text-muted">Diskon ini akan memotong harga asli seluruh produk secara otomatis.</small>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Batas Waktu Event</label>
+                            <input type="datetime-local" class="form-control" id="eventBatasWaktu">
+                            <small class="text-muted">Kosongkan jika tidak ada batas waktu tertentu.</small>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label>Status Event</label>
+                            <select class="form-control" id="eventStatus">
+                                <option value="Aktif">Aktif</option>
+                                <option value="Nonaktif">Nonaktif</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-save"></i> Simpan Pengaturan Event</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- 6. Klien Section -->
+            <section id="klien-section" class="content-section">
+                <div class="flex-between">
+                    <h2 class="page-title">Manajemen Instansi / Klien</h2>
+                </div>
+                
+                <div class="card-box mt-3">
+                    <form id="klienForm" style="display: flex; gap: 15px; align-items: flex-end; margin-bottom: 30px; flex-wrap: wrap;">
+                        <div class="form-group" style="flex: 2; min-width: 200px; margin-bottom: 0;">
+                            <label>Nama Instansi</label>
+                            <input type="text" class="form-control" id="klienNama" placeholder="Contoh: Dinas Pendidikan Provinsi" required>
+                        </div>
+                        <div class="form-group" style="flex: 2; min-width: 200px; margin-bottom: 0;">
+                            <label>Logo Gambar (Opsional)</label>
+                            <input type="file" class="form-control" id="klienGambar" accept="image/*">
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="btnTambahKlien" style="flex: 1; min-width: 150px;"><i class="fa-solid fa-plus"></i> Tambah</button>
+                    </form>
+
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%; white-space: nowrap;">No</th>
+                                    <th style="width: 10%; white-space: nowrap; text-align: center;">Logo</th>
+                                    <th style="width: 40%;">Nama Instansi</th>
+                                    <th style="width: 25%; white-space: nowrap;">Ditambahkan Pada</th>
+                                    <th style="width: 20%; white-space: nowrap; min-width: 160px;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="klienTableBody">
+                                <tr>
+                                    <td colspan="4" class="text-center py-4">
+                                        <i class="fa-solid fa-spinner fa-spin text-primary" style="font-size: 2rem;"></i>
+                                        <p class="mt-2 text-muted">Memuat data instansi...</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Testimoni Section -->
+            <section id="testimoni-section" class="content-section">
+                <div class="flex-between">
+                    <h2 class="page-title">Manajemen Testimoni Pelanggan</h2>
+                </div>
+                
+                <div class="card-box mt-3">
+                    <p class="text-muted" style="margin-bottom: 20px;">Daftar ulasan dan rating bintang yang diberikan oleh pengguna. Admin dapat menghapus ulasan yang dinilai tidak pantas atau tidak relevan.</p>
+                    
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%; white-space: nowrap;">No</th>
+                                    <th style="width: 15%; white-space: nowrap;">Tanggal</th>
+                                    <th style="width: 20%; white-space: nowrap;">Nama Pelanggan</th>
+                                    <th style="width: 15%; white-space: nowrap; text-align: center;">Rating</th>
+                                    <th style="width: 35%;">Ulasan / Umpan Balik</th>
+                                    <th style="width: 10%; white-space: nowrap; text-align: center;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="testimoniTableBody">
+                                <tr>
+                                    <td colspan="6" class="text-center py-4">
+                                        <i class="fa-solid fa-spinner fa-spin text-primary" style="font-size: 2rem;"></i>
+                                        <p class="mt-2 text-muted">Memuat data testimoni...</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. Tampilan Section -->
+            <section id="tampilan-section" class="content-section">
+                <div class="flex-between">
+                    <h2 class="page-title">Pengaturan Tampilan Website</h2>
+                </div>
+                
+                <div class="card-box mt-3" style="max-width: 600px;">
+                    <form id="tampilanForm">
+                        <h3 style="margin-bottom: 15px; font-size: 1.2rem;">Hero Background (Latar Utama)</h3>
+                        
+                        <!-- Preview Gambar Saat Ini -->
+                        <div id="currentHeroImageContainer" style="display: none; margin-bottom: 15px; text-align: center; border: 1px dashed #ccc; border-radius: 8px; padding: 12px; background-color: #f8f9fa;">
+                            <span style="display: block; font-size: 0.85rem; font-weight: 600; color: #495057; margin-bottom: 8px; text-align: left;"><i class="fa-solid fa-image"></i> Gambar Latar Utama Saat Ini:</span>
+                            <img id="currentHeroImage" src="" alt="Hero Background Current" style="max-width: 100%; max-height: 220px; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); object-fit: contain;">
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label>Upload Gambar Latar Utama Baru (Ganti Gambar)</label>
+                            <input type="file" class="form-control" id="heroGambar" accept="image/*" required>
+                            <small class="text-muted">Disarankan resolusi lanskap (misal: 1920x1080px) agar tidak pecah di layar komputer.</small>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="btnUploadHero"><i class="fa-solid fa-upload"></i> Unggah & Terapkan</button>
+                    </form>
+                </div>
+
+                <!-- Card Logo Website -->
+                <div class="card-box mt-3" style="max-width: 600px;">
+                    <form id="logoForm">
+                        <h3 style="margin-bottom: 15px; font-size: 1.2rem;">Logo Website</h3>
+                        
+                        <!-- Preview Logo Saat Ini -->
+                        <div id="currentLogoContainer" style="display: none; margin-bottom: 15px; text-align: center; border: 1px dashed #ccc; border-radius: 8px; padding: 12px; background-color: #f8f9fa;">
+                            <span style="display: block; font-size: 0.85rem; font-weight: 600; color: #495057; margin-bottom: 8px; text-align: left;"><i class="fa-solid fa-image"></i> Logo Saat Ini:</span>
+                            <img id="currentLogoImage" src="" alt="Logo Brand Current" style="max-width: 150px; max-height: 80px; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); object-fit: contain;">
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label>Upload Logo Baru (Ganti Logo)</label>
+                            <input type="file" class="form-control" id="logoGambar" accept="image/*" required>
+                            <small class="text-muted">Disarankan logo dengan latar belakang transparan (PNG) dan tinggi minimal 60px.</small>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="btnUploadLogo"><i class="fa-solid fa-upload"></i> Unggah & Terapkan Logo</button>
+                    </form>
+                </div>
+
+                <div class="card-box mt-3" style="max-width: 600px;">
+                    <form id="tampilanTeksForm">
+                        <h3 style="margin-bottom: 15px; font-size: 1.2rem;">Pengaturan Teks Website</h3>
+                        
+                        <h4 style="font-size: 1rem; margin-bottom: 10px;">Hero Section</h4>
+                        <div class="form-group mb-3">
+                            <label>Hero Title (Gunakan &lt;br&gt; untuk baris baru)</label>
+                            <textarea class="form-control" id="teksHeroTitle" rows="2"></textarea>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label>Hero Subtitle</label>
+                            <textarea class="form-control" id="teksHeroSubtitle" rows="3"></textarea>
+                        </div>
+                        
+                        <h4 style="font-size: 1rem; margin-bottom: 10px;">Footer Section</h4>
+                        <div class="form-group mb-3">
+                            <label>Nama Brand</label>
+                            <input type="text" class="form-control" id="teksFooterBrand">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Deskripsi Brand</label>
+                            <textarea class="form-control" id="teksFooterDesc" rows="2"></textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Kontak WhatsApp</label>
+                            <input type="text" class="form-control" id="teksFooterWA">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Instagram</label>
+                            <input type="text" class="form-control" id="teksFooterIG">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Email</label>
+                            <input type="text" class="form-control" id="teksFooterEmail">
+                        </div>
+                        <div class="form-group mb-4">
+                            <label>Copyright</label>
+                            <input type="text" class="form-control" id="teksFooterCopy">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" id="btnSimpanTeksTampilan"><i class="fa-solid fa-save"></i> Simpan Pengaturan Teks</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- 8. Pengaturan Ongkir & Bank Section -->
+            <section id="pengaturan-section" class="content-section">
+                <div class="flex-between">
+                    <h2 class="page-title">Pengaturan Ongkir, Bank &amp; WA</h2>
+                </div>
+
+                <div class="settings-grid">
+
+                    <!-- Card Ongkos Kirim -->
+                    <div class="card-box" style="border-top: 4px solid #4361ee;">
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+                            <div style="width:42px; height:42px; border-radius:10px; background:linear-gradient(135deg,#4361ee,#7209b7); display:flex; align-items:center; justify-content:center; color:#fff; font-size:1.2rem;">
+                                <i class="fa-solid fa-truck"></i>
+                            </div>
+                            <div>
+                                <h3 style="margin:0; font-size:1.1rem;">Pengaturan Ongkos Kirim</h3>
+                                <small class="text-muted">Atur biaya ongkir yang ditampilkan ke pembeli</small>
+                            </div>
+                        </div>
+                        <form id="ongkirForm">
+                            <div class="form-group mb-3">
+                                <label>Status Ongkos Kirim</label>
+                                <select class="form-control" id="ongkirStatus">
+                                    <option value="Aktif">Aktif (Dikenakan Ongkir)</option>
+                                    <option value="Nonaktif">Nonaktif (Gratis Ongkir)</option>
+                                </select>
+                                <small class="text-muted">Jika Nonaktif, ongkir tidak akan dikenakan ke pembeli.</small>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label>Judul / Keterangan Ongkir</label>
+                                <input type="text" class="form-control" id="ongkirJudul" placeholder="Contoh: Ongkos Kirim Dalam Kota">
+                            </div>
+                            <div class="form-group mb-3">
+                                <label>Biaya Ongkir (Rp)</label>
+                                <input type="number" class="form-control" id="ongkirBiaya" placeholder="Contoh: 15000" min="0">
+                                <small class="text-muted">Masukkan angka saja, tanpa titik atau koma.</small>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label>Keterangan Tambahan (Opsional)</label>
+                                <textarea class="form-control" id="ongkirKeterangan" rows="2" placeholder="Contoh: Biaya ongkir dapat berbeda tergantung lokasi pengiriman."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary" id="btnSimpanOngkir">
+                                <i class="fa-solid fa-save"></i> Simpan Pengaturan Ongkir
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Card Informasi Rekening Bank -->
+                    <div>
+                        <!-- Card Bank Utama -->
+                        <div class="card-box" style="border-top: 4px solid #2ec4b6; margin-bottom: 24px;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+                                <div style="width:42px; height:42px; border-radius:10px; background:linear-gradient(135deg,#2ec4b6,#1a7a6e); display:flex; align-items:center; justify-content:center; color:#fff; font-size:1.2rem;">
+                                    <i class="fa-solid fa-building-columns"></i>
+                                </div>
+                                <div>
+                                    <h3 style="margin:0; font-size:1.1rem;">Rekening Bank Utama</h3>
+                                    <small class="text-muted">Rekening tujuan pembayaran pembeli</small>
+                                </div>
+                            </div>
+                            <form id="bankForm">
+                                <div class="form-group mb-3">
+                                    <label>Nama Bank</label>
+                                    <select class="form-control" id="bankNama">
+                                        <option value="BCA">BCA (Bank Central Asia)</option>
+                                        <option value="BNI">BNI (Bank Negara Indonesia)</option>
+                                        <option value="BRI">BRI (Bank Rakyat Indonesia)</option>
+                                        <option value="Mandiri">Bank Mandiri</option>
+                                        <option value="BSI">BSI (Bank Syariah Indonesia)</option>
+                                        <option value="CIMB Niaga">CIMB Niaga</option>
+                                        <option value="Permata">Bank Permata</option>
+                                        <option value="Danamon">Bank Danamon</option>
+                                        <option value="BTN">BTN (Bank Tabungan Negara)</option>
+                                        <option value="Lainnya">Lainnya</option>
+                                    </select>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label>Nama Pemilik Rekening</label>
+                                    <input type="text" class="form-control" id="bankPemilik" placeholder="Contoh: Budi Santoso">
+                                </div>
+                                <div class="form-group mb-4">
+                                    <label>Nomor Rekening</label>
+                                    <input type="text" class="form-control" id="bankNomor" placeholder="Contoh: 1234567890">
+                                </div>
+                                <button type="submit" class="btn btn-primary" id="btnSimpanBank" style="background: linear-gradient(135deg, #2ec4b6, #1a7a6e); border: none;">
+                                    <i class="fa-solid fa-save"></i> Simpan Info Rekening
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Card WhatsApp Admin -->
+                        <div class="card-box" style="border-top: 4px solid #10b981; margin-bottom: 24px;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+                                <div style="width:42px; height:42px; border-radius:10px; background:linear-gradient(135deg,#10b981,#047857); display:flex; align-items:center; justify-content:center; color:#fff; font-size:1.2rem;">
+                                    <i class="fa-brands fa-whatsapp"></i>
+                                </div>
+                                <div>
+                                    <h3 style="margin:0; font-size:1.1rem;">WhatsApp Admin</h3>
+                                    <small class="text-muted">Nomor WA untuk konfirmasi verifikasi cepat</small>
+                                </div>
+                            </div>
+                            <form id="waForm">
+                                <div class="form-group mb-4">
+                                    <label>Nomor WhatsApp</label>
+                                    <input type="text" class="form-control" id="waAdminNomor" placeholder="Contoh: 628123456789">
+                                    <small class="text-muted">Gunakan format angka dengan kode negara (misal: 628xxxxxx).</small>
+                                </div>
+                                <button type="submit" class="btn btn-primary" id="btnSimpanWA" style="background: linear-gradient(135deg, #10b981, #047857); border: none;">
+                                    <i class="fa-solid fa-save"></i> Simpan Nomor WA
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Preview Card -->
+                        <div class="card-box" style="background: linear-gradient(135deg, #1e2a4a 0%, #2d3f6b 100%); color: white; border: none;">
+                            <h4 style="margin-bottom: 14px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7;"><i class="fa-solid fa-eye"></i> Preview Tampilan ke Pembeli</h4>
+                            <div style="background: rgba(255,255,255,0.08); border-radius: 12px; padding: 18px;">
+                                <div style="display:flex; align-items:center; gap:10px; margin-bottom: 12px;">
+                                    <i class="fa-solid fa-building-columns" style="font-size:1.4rem; color:#7fd8d4;"></i>
+                                    <div>
+                                        <div style="font-size: 0.8rem; opacity: 0.7;">Transfer ke Rekening</div>
+                                        <div id="previewBankNama" style="font-weight: 700; font-size: 1.1rem; color: #7fd8d4;">BCA</div>
+                                    </div>
+                                </div>
+                                <div style="display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; font-size: 0.9rem;">
+                                    <span style="opacity:0.7;">No. Rekening</span>
+                                    <strong id="previewBankNomor" style="font-size: 1.05rem; letter-spacing: 1px;">-</strong>
+                                    <span style="opacity:0.7;">Atas Nama</span>
+                                    <strong id="previewBankPemilik">-</strong>
+                                </div>
+                                <hr style="border-color: rgba(255,255,255,0.15); margin: 14px 0;">
+                                <div style="display:flex; align-items:center; gap:10px;">
+                                    <i class="fa-solid fa-truck" style="color: #ffa94d;"></i>
+                                    <div>
+                                        <div id="previewOngkirLabel" style="font-size: 0.85rem; opacity: 0.8;">Ongkos Kirim</div>
+                                        <div id="previewOngkirBiaya" style="font-weight: 700; color: #ffa94d;">Gratis</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Modal Detail Akun Pengguna -->
+    <div class="modal-overlay" id="userModal">
+        <div class="modal-box">
+            <h3 id="userModalTitle">Detail Akun Pengguna</h3>
+            <div id="userModalBody" style="text-align: left; margin-top: 15px;">
+                <!-- User details goes here -->
+            </div>
+            <button class="btn btn-outline-dark btn-block mt-4" onclick="closeUserModal()">Tutup</button>
+        </div>
+    </div>
+
+    <!-- Modal Verifikasi Dinamis -->
+    <div class="modal-overlay" id="verifyModal">
+        <div class="modal-box">
+            <h3 id="modalTitle">Verifikasi Pesanan</h3>
+            <p class="text-muted mb-3" id="modalSubtitle">Order ID: -</p>
+            
+            <div id="modalFormTolak" style="display: none; text-align: left;">
+                <div class="form-group mb-3">
+                    <label>Alasan Penolakan</label>
+                    <textarea class="form-control" id="modalAlasanInput" rows="3" placeholder="Contoh: Format ukuran salah..."></textarea>
+                </div>
+                <button id="btnSubmitTolak" class="btn btn-danger btn-block" onclick="submitVerifyPO('Ditolak')"><i class="fa-solid fa-xmark"></i> Tolak Pesanan</button>
+            </div>
+
+            <div id="modalFormSetuju" style="display: none; text-align: left;">
+                <div class="form-group mb-3">
+                    <label>Harga Satuan / Nominal Awal (Rp)</label>
+                    <input type="number" class="form-control" id="modalNominalInput" placeholder="Contoh: 250000" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label>Diskon (%)</label>
+                    <input type="number" class="form-control" id="modalDiskonInput" placeholder="Contoh: 10" value="0" min="0" max="100">
+                </div>
+                <div class="form-group mb-3">
+                    <label>Ongkos Kirim (Rp)</label>
+                    <input type="number" class="form-control" id="modalOngkirInput" placeholder="Contoh: 15000" value="0" min="0">
+                </div>
+                <div class="mb-3" style="background: #f8f9fa; padding: 10px; border-radius: 6px; border: 1px dashed #ced4da;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 0.9rem; color: #495057;">Estimasi Total Akhir:</span>
+                        <span id="modalTotalAkhirLabel" style="font-weight: bold; font-size: 1.1rem; color: #2b8a3e;">Rp 0</span>
+                    </div>
+                </div>
+                <div class="form-group mb-3">
+                    <label>Tanggal Maksimal Pembayaran</label>
+                    <input type="date" class="form-control" id="modalTanggalBatasInput" required>
+                </div>
+                <button id="btnSubmitSetuju" class="btn btn-success btn-block" onclick="submitVerifyPO('Disetujui')"><i class="fa-solid fa-check"></i> Setujui Pesanan</button>
+            </div>
+            
+            <button class="btn btn-outline-dark btn-block mt-2" onclick="closeVerifyModal()">Batal</button>
+        </div>
+    </div>
+
+    <!-- Modal Verifikasi Pembayaran Dinamis -->
+    <div class="modal-overlay" id="verifyPaymentModal">
+        <div class="modal-box">
+            <h3 id="payModalTitle">Verifikasi Pembayaran</h3>
+            <p class="text-muted mb-3" id="payModalSubtitle">Order ID: -</p>
+            
+            <div id="payModalFormTolak" style="display: none; text-align: left;">
+                <div class="form-group mb-3">
+                    <label>Alasan Penolakan Bukti Pembayaran</label>
+                    <textarea class="form-control" id="payModalAlasanInput" rows="3" placeholder="Contoh: Bukti transfer terpotong atau nominal tidak sesuai..."></textarea>
+                </div>
+                <button id="btnSubmitPayTolak" class="btn btn-danger btn-block" onclick="submitVerifyPayment('Ditolak')"><i class="fa-solid fa-xmark"></i> Tolak Pembayaran</button>
+            </div>
+            
+            <button class="btn btn-outline-dark btn-block mt-2" onclick="closeVerifyPaymentModal()">Batal</button>
+        </div>
+    </div>
+
+    <!-- Modal Tambah/Edit Produk -->
+    <div class="modal-overlay" id="productModal">
+        <div class="modal-box">
+            <h3 id="productModalTitle">Tambah Produk Baru</h3>
+            <form id="productForm" style="text-align: left; margin-top: 15px;">
+                <input type="hidden" id="prodId">
+                <div class="form-group mb-3">
+                    <label>Kategori</label>
+                    <input type="text" class="form-control" id="prodKategori" placeholder="Contoh: PDH, PDL, Aksesoris..." required>
+                </div>
+                <div class="form-group mb-3">
+                    <label>Nama Produk</label>
+                    <input type="text" class="form-control" id="prodNama" placeholder="Contoh: PDH Pria Lengan Pendek" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label>Harga Asli (Format Teks)</label>
+                    <input type="text" class="form-control" id="prodHarga" placeholder="Contoh: Rp 250.000" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label>Badge (Opsional)</label>
+                    <input type="text" class="form-control" id="prodBadge" placeholder="Contoh: Buka Pre-Order / Terlaris">
+                </div>
+                <div class="form-group mb-3">
+                    <label>Ukuran Tersedia (Pisahkan dengan koma)</label>
+                    <input type="text" class="form-control" id="prodUkuran" placeholder="Contoh: S, M, L, XL, XXL, Custom" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label>Gambar Produk Saat Ini</label>
+                    <div style="margin-bottom: 10px;">
+                        <img id="prodGambarPreview" src="" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; display: none;">
+                    </div>
+                    <label>Upload Gambar Produk (Maks 2MB)</label>
+                    <input type="file" class="form-control" id="prodGambarFile" accept="image/*">
+                    <small class="text-muted" id="prodGambarHelp">Kosongkan jika tidak ingin mengubah gambar.</small>
+                </div>
+                <div class="form-group mb-3">
+                    <label>Video Produk Saat Ini</label>
+                    <div style="margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
+                        <span id="prodVideoPreviewText" class="text-muted" style="font-size: 0.9rem;">Tidak ada video</span>
+                        <a id="prodVideoPreviewLink" href="#" target="_blank" style="display: none;" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-play"></i> Putar Video</a>
+                    </div>
+                    <label>Upload Video Produk (Maks 15MB)</label>
+                    <input type="file" class="form-control" id="prodVideoFile" accept="video/*">
+                    <small class="text-muted" id="prodVideoHelp">Kosongkan jika tidak ingin mengubah video.</small>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Simpan Produk</button>
+            </form>
+            <button class="btn btn-outline-dark btn-block mt-2" onclick="closeProductModal()">Batal</button>
+        </div>
+    </div>
+
+    <!-- Modal Edit Klien -->
+    <div class="modal-overlay" id="klienModal">
+        <div class="modal-box">
+            <h3 id="klienModalTitle">Edit Instansi</h3>
+            <form id="klienEditForm" style="text-align: left; margin-top: 15px;">
+                <input type="hidden" id="editKlienOldNama">
+                <div class="form-group mb-3">
+                    <label>Nama Instansi</label>
+                    <input type="text" class="form-control" id="editKlienNama" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label>Logo Gambar Baru (Opsional)</label>
+                    <input type="file" class="form-control" id="editKlienGambar" accept="image/*">
+                    <small class="text-muted">Kosongkan jika tidak ingin mengubah gambar.</small>
+                </div>
+                <div class="form-group mb-3">
+                    <label style="cursor: pointer;">
+                        <input type="checkbox" id="editKlienHapusGambar"> Hapus gambar yang sudah ada
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block" id="btnSubmitEditKlien">Simpan Perubahan</button>
+            </form>
+            <button class="btn btn-outline-dark btn-block mt-2" onclick="closeKlienModal()">Batal</button>
+        </div>
+    </div>
+
+    <!-- Script -->
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Modal Konfirmasi -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal-box" style="text-align: center; max-width: 400px;">
+            <div style="font-size: 3rem; color: var(--danger); margin-bottom: 15px;">
+                <i class="fa-solid fa-circle-exclamation"></i>
+            </div>
+            <h3 style="margin-bottom: 10px;">Konfirmasi Tindakan</h3>
+            <p id="confirmModalMessage" class="text-muted" style="margin-bottom: 25px;"></p>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button class="btn btn-outline-dark" style="flex: 1;" onclick="closeConfirmModal()">Batal</button>
+                <button class="btn btn-danger" style="flex: 1;" id="btnConfirmAction">Ya, Lanjutkan</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Input Password -->
+    <div class="modal-overlay" id="passwordModal">
+        <div class="modal-box" style="text-align: center; max-width: 400px;">
+            <div style="font-size: 3rem; color: var(--danger); margin-bottom: 15px;">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h3 style="margin-bottom: 10px;">Verifikasi Admin</h3>
+            <p class="text-muted" style="margin-bottom: 25px;">Masukkan password admin untuk menghapus semua data secara permanen.</p>
+            <div class="form-group mb-3 text-left">
+                <input type="password" id="adminPasswordInput" class="form-control" placeholder="Password Admin">
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button class="btn btn-outline-dark" style="flex: 1;" onclick="closePasswordModal()">Batal</button>
+                <button class="btn btn-danger" style="flex: 1;" id="btnSubmitPassword" onclick="submitDeleteAllPO()">Hapus Semua</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Pilihan Keluar -->
+    <div class="modal-overlay" id="logoutChoiceModal">
+        <div class="modal-box" style="text-align: center; max-width: 400px;">
+            <div style="font-size: 3rem; color: var(--primary); margin-bottom: 15px;">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </div>
+            <h3 style="margin-bottom: 10px;">Pilih Aksi Keluar</h3>
+            <p class="text-muted" style="margin-bottom: 25px;">Apakah Anda ingin keluar dari akun admin atau hanya kembali ke Landing Page?</p>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button class="btn btn-danger" style="width: 100%;" id="btnFullLogout"><i class="fa-solid fa-user-xmark"></i> Keluar Akun Admin</button>
+                <button class="btn btn-primary" style="width: 100%;" id="btnGoToLanding"><i class="fa-solid fa-house"></i> Ke Landing Page Saja</button>
+                <button class="btn btn-outline-dark" style="width: 100%; margin-top: 10px;" onclick="document.getElementById('logoutChoiceModal').classList.remove('show')">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Preview Bukti Transfer -->
+    <div class="modal-overlay" id="receiptModal">
+        <div class="modal-box" style="max-width: 600px; text-align: center;">
+            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                <h3 style="margin: 0; font-size: 1.3rem; color: var(--navy-color);"><i class="fa-solid fa-image"></i> Bukti Transfer</h3>
+                <button onclick="document.getElementById('receiptModal').classList.remove('show')" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+            </div>
+            <img id="receiptModalImg" src="" style="width: 100%; max-height: 70vh; object-fit: contain; border-radius: 8px; border: 1px solid #ddd;">
+        </div>
+    </div>
+
+    <!-- Modal Video Preview -->
+    <div class="modal-overlay" id="videoPreviewModal">
+        <div class="modal-box" style="max-width: 600px; text-align: center; padding: 20px;">
+            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                <h3 style="margin: 0; font-size: 1.3rem; color: var(--navy-color);"><i class="fa-solid fa-circle-play"></i> Video Produk</h3>
+                <button onclick="closeVideoPreviewModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+            </div>
+            <div id="videoPreviewContainer" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; background: #000;">
+                <!-- Video player or iframe will be inserted here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

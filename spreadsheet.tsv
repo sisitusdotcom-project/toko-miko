@@ -1,0 +1,23 @@
+=== SHEET: Data_Users ===
+Timestamp	Nama Lengkap	Nomor WhatsApp	Email	Password
+2026-05-15 10:00:00	Ahmad Budi	081234567890	ahmad@gmail.com	rahasia123
+2026-05-15 10:05:00	Siti Aminah	089876543210	siti@gmail.com	password321
+
+=== SHEET: Data_PO ===
+Timestamp	ID Order	Nama Lengkap	Kategori	Produk	Ukuran	Status	Harga Total
+2026-05-15 10:10:00	#PO-12345	Ahmad Budi	Pakaian Dinas Harian	Baju PDH Khaki	L	Pending	250000
+2026-05-15 10:15:00	#PO-67890	Siti Aminah	Pakaian Dinas Lapangan	Baju PDL Brimob	M	Disetujui	350000
+
+=== SHEET: Data_Pembayaran ===
+Timestamp	ID Order	Nama Lengkap	Nama Produk	Jumlah Bayar	Bukti Transfer	Status Verifikasi	Tanggal Verifikasi
+2026-05-15 10:20:00	#PO-67890	Siti Aminah	Baju PDL Brimob	350000	https://images.unsplash.com/photo-1620601552599-281b3ceaf006?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80	Selesai	2026-05-15 11:00:00
+
+=== SHEET: Data_Produk ===
+ID Produk	Kategori	Nama Produk	Harga Asli	Harga Diskon	Badge	URL Gambar	Ukuran
+PROD-1683930000000	pdh	PDH Pria Lengan Pendek	Rp 250.000		Buka Pre-Order	https://images.unsplash.com/photo-1593030103066-0093718efce9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80	S, M, L, XL, XXL
+PROD-1683930005000	pdh	PDH Wanita Lengan Panjang	Rp 300.000		Terlaris	https://images.unsplash.com/photo-1543163521-1bf539c55dd2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80	S, M, L, XL
+PROD-1683930010000	pdl	PDL Lapangan Taktis	Rp 350.000		Buka Pre-Order	https://images.unsplash.com/photo-1506629082955-511b1aa562c8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80	M, L, XL, XXL, Custom
+
+=== SHEET: Data_Event ===
+Nama Event	Status	Diskon (%)
+Promo Kemerdekaan	Aktif	10

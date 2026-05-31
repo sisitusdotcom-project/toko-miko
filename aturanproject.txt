@@ -1,0 +1,13 @@
+pembuatan website statis menggunakan html vanila css js dan untuk back end menggunakan google appskrip sebagai tempat menyimpan informasi mengenai sistem preorder jahit/buat baju dinas resmi,(catatan semua code yang ada di website ni harus clean tanpa ada code yang tidak perlu lalu hindari inline yaitu menggabung semua code menjadi 1 file jadi nanti di pisahkan ke folder folder tertentu css ada di folder style dan html index lalu js ada di script intinya harus clean,terstruktur dan aman)
+
+untuk alurnya;
+ada sistem ogin untuk 2 role yaitu user dan admin
+peran user adalah seorang customer yang bisa login,melihat landing page umum dan juga melakukan pre order
+peran admin adalah bisa mengakses semua fitur diantaranya login,landing page umum,landing page khusus admin beserta fitur didalamnya
+
+untuk algoritma proses yang ada di website ini adalah sebagai berikut;
+user masuk kedalam website>user login atau membuat akun baru>user diarahkan ke landing page umum>user bisa melakukan pre order melalui google form saat user click tombol pre order namun harus menunggu konfirmasi dari admin>admin dapat mengonfirmasi pre order dari user di terima atau ditolak,jika diterima admin akan mengirim total biaya dan alamat transfer dan bisa memberikan diskon khusus misal jika ada event tertentu dan memberi keterangan diskon,jika tidak admin akan memberikan alasan penolakan>user menerima notifikasi konfirmasi dari admin,jika disetujui user akan melakukan pembayaran melalui alamat transfer yang sudah diberikan admin lalu user harus mengirim bukti transfer ke admin melalui bentuk file gambar,jika ditolak user bisa mengajukan pre order kemali dengan memastikan tanggalnya sudah diganti untuk mengantisifikasi pembatalan terusan dari admin>admin menerima bukti transfer dari user yang pre ordernya telah di setujui>admin bisa menolak bukti karena tidak jelas atau alasan lainya,atau menerima bukti transfer dan melanjutkan proses pre order ke thab berikutnya.>user menerima notifikasi konfirmasi pembayaran dan pre order dari admin lalu user tinggal menunggu prosesnya selesai
+
+fitur
+untuk fitur user ada login/membuat akun baru,lalu mengakses homepage,pre order,dan notifikasi
+untuk fitur admin ada login admin,akses homepage,akses admin page,akses data pre order,akses data pembayaran,akses verifikasi pre order,akses create event(diskon berwaktu),akses CRUD new admin/user account

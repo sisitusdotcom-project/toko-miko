@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pre-Order Seragam Dinas Berkualitas</title>
+    <meta name="description" content="Seragam dinas berkualitas, custom sesuai ukuran Anda. Pre-order sekarang untuk PDH, PDL, dan Seragam Upacara.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Header / Navbar -->
+    <header class="navbar">
+        <div class="container nav-content">
+            <a href="#" class="logo" id="dynNavbarBrand">Dinas<span>Custom.</span></a>
+            <nav>
+                <ul class="nav-links" id="nav-links">
+                    <li><a href="#hero">Beranda</a></li>
+                    <li><a href="#gallery">Katalog</a></li>
+                    <li><a href="#how-it-works">Cara Pesan</a></li>
+                    <li><a href="#social-proof">Klien Kami</a></li>
+                </ul>
+            </nav>
+            <div class="nav-actions">
+                <a href="login.html" class="btn btn-outline btn-sm" style="color: var(--primary-color); border-color: var(--primary-color); margin-right: 10px;">
+                    <i class="fa-solid fa-user"></i> Masuk
+                </a>
+                <div class="hamburger" id="hamburger">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 1. Hero Section -->
+    <section id="hero" class="hero">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <h1 class="hero-title" id="dynHeroTitle">Seragam Dinas Berkualitas,<br>Custom Sesuai Ukuran Anda.</h1>
+            <p class="hero-subtitle" id="dynHeroSubtitle">Tampil profesional dengan pakaian dinas (PDH, PDL) jahitan rapi dan bahan premium. Percayakan seragam Anda pada ahlinya.</p>
+            <div class="hero-actions">
+                <a href="login.html" class="btn btn-primary btn-lg">Mulai Pre-Order Sekarang</a>
+                <a href="#how-it-works" class="btn btn-outline btn-lg">Cara Kerja</a>
+            </div>
+            
+            <!-- Event Diskon Berwaktu -->
+            <div class="discount-banner">
+                <div class="discount-info">
+                    <i class="fa-solid fa-tags"></i>
+                    <span id="eventBannerText">Promo Spesial Batch #3</span>
+                </div>
+                <div class="countdown" id="countdown">
+                    <div class="time-box"><span id="days">00</span><small>Hari</small></div>
+                    <span class="colon">:</span>
+                    <div class="time-box"><span id="hours">00</span><small>Jam</small></div>
+                    <span class="colon">:</span>
+                    <div class="time-box"><span id="minutes">00</span><small>Menit</small></div>
+                    <span class="colon">:</span>
+                    <div class="time-box"><span id="seconds">00</span><small>Detik</small></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. How It Works (Langkah Pre-Order) -->
+    <section id="how-it-works" class="how-it-works py-section bg-light">
+        <div class="container text-center">
+            <h2 class="section-title">Cara Pre-Order Mudah</h2>
+            <p class="section-subtitle">Hanya butuh 4 langkah sederhana untuk mendapatkan seragam dinas idaman Anda.</p>
+            
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-icon"><i class="fa-solid fa-shirt"></i></div>
+                    <h3>1. Pilih Model</h3>
+                    <p>Pilih desain baju dinas favoritmu dari katalog kami (PDH, PDL, Upacara).</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-icon"><i class="fa-solid fa-pen-to-square"></i></div>
+                    <h3>2. Isi Form</h3>
+                    <p>Klik tombol PO pada produk dan lengkapi data ukuran Anda via Google Form.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-icon"><i class="fa-solid fa-user-check"></i></div>
+                    <h3>3. Verifikasi Admin</h3>
+                    <p>Tunggu konfirmasi rincian biaya dan nomor rekening transfer dari tim kami.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-icon"><i class="fa-solid fa-box-open"></i></div>
+                    <h3>4. Bayar & Kirim</h3>
+                    <p>Upload bukti pembayaran, dan seragam akan segera diproses & dikirim.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Galeri Produk & Kategori -->
+    <section id="gallery" class="gallery py-section">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-title">Katalog Produk</h2>
+                <p class="section-subtitle">Berbagai pilihan seragam dengan bahan berkualitas dan jahitan rapi.</p>
+            </div>
+
+            <div class="filter-container" id="filterContainer">
+                <!-- Filter buttons will be generated dynamically -->
+                <button class="filter-btn active" data-filter="all">Semua</button>
+            </div>
+
+            <div class="product-grid" id="productGrid">
+                <!-- Loading state -->
+                <div class="text-center" style="grid-column: 1 / -1; padding: 3rem;">
+                    <i class="fa-solid fa-spinner fa-spin text-primary" style="font-size: 2rem;"></i>
+                    <p class="mt-2 text-muted">Memuat katalog produk...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Social Proof (Testimoni & Klien) -->
+    <section id="social-proof" class="social-proof py-section bg-navy">
+        <div class="container text-center">
+            <h2 class="section-title text-white">Dipercaya Oleh Berbagai Instansi</h2>
+            <p class="section-subtitle text-light-gray">Kami telah melayani pembuatan seragam dari berbagai instansi pemerintah dan swasta.</p>
+            
+            <div class="client-logos" id="clientLogosContainer">
+                <!-- Logos will be populated dynamically -->
+            </div>
+
+            <div class="testimonial-grid mt-4" id="testimonialGrid">
+                <div class="testi-card">
+                    <div style="color: #ffc107; margin-bottom: 8px;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p class="quote">"Jahitannya sangat rapi, bahannya adem dan ukurannya pas banget di badan. Proses PO juga transparan."</p>
+                    <div class="author">
+                        <strong>Bpk. Ahmad</strong>
+                    </div>
+                </div>
+                <div class="testi-card">
+                    <div style="color: #ffc107; margin-bottom: 8px;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p class="quote">"Sangat puas dengan PDL yang dipesan. Kuat untuk dipakai di lapangan dan desainnya terlihat gagah."</p>
+                    <div class="author">
+                        <strong>Ibu Siti</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h2 id="dynFooterBrand">Dinas<span>Custom.</span></h2>
+                    <p id="dynFooterDesc">Solusi pakaian dinas berkualitas, jahitan rapi, dan pelayanan profesional.</p>
+                </div>
+                <div class="footer-links">
+                    <h3>Kontak Kami</h3>
+                    <ul>
+                        <li id="dynFooterWA"><i class="fa-brands fa-whatsapp"></i> +62 812-3456-7890</li>
+                        <li id="dynFooterIG"><i class="fa-brands fa-instagram"></i> @dinascustom</li>
+                        <li id="dynFooterEmail"><i class="fa-regular fa-envelope"></i> hello@dinascustom.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p id="dynFooterCopy">&copy; 2026 DinasCustom. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal Video Preview -->
+    <div class="modal-overlay" id="videoPreviewModal">
+        <div class="modal-box" style="max-width: 600px; text-align: center; padding: 20px;">
+            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                <h3 style="margin: 0; font-size: 1.3rem; color: var(--navy-color);"><i class="fa-solid fa-circle-play"></i> Video Produk</h3>
+                <button onclick="closeVideoPreviewModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #666;">&times;</button>
+            </div>
+            <div id="videoPreviewContainer" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; background: #000;">
+                <!-- Video player or iframe will be inserted here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/guard.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
