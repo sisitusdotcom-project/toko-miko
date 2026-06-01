@@ -237,13 +237,37 @@ document.addEventListener('DOMContentLoaded', () => {
             link.href = logoUrl;
         }
         
+        const formatBrandText = (text) => {
+            if (!text) return '';
+            if (text.includes('<span>') || text.includes('<span') || text.includes('SPAN')) {
+                return text;
+            }
+            if (text.toLowerCase() === 'dinascustom.') {
+                return 'Dinas<span>Custom.</span>';
+            }
+            const spaceIdx = text.indexOf(' ');
+            if (spaceIdx !== -1) {
+                const first = text.substring(0, spaceIdx);
+                const rest = text.substring(spaceIdx);
+                return `${first}<span>${rest}</span>`;
+            }
+            const camelMatch = text.match(/^([A-Z][a-z0-9]+)([A-Z].*)$/);
+            if (camelMatch) {
+                return `${camelMatch[1]}<span>${camelMatch[2]}</span>`;
+            }
+            const half = Math.ceil(text.length / 2);
+            const first = text.substring(0, half);
+            const rest = text.substring(half);
+            return `${first}<span>${rest}</span>`;
+        };
+
         const logoLeft = document.getElementById('authLogoLeft');
         if (logoLeft) {
             let logoHtml = '';
             if (logoUrl) {
                 logoHtml = `<img src="${logoUrl}" alt="Logo" style="height: 38px; object-fit: contain; margin-right: 8px;">`;
             }
-            logoLeft.innerHTML = `${logoHtml}<span>${brandText}</span>`;
+            logoLeft.innerHTML = `${logoHtml}${formatBrandText(brandText)}`;
         }
 
         const logoMobile = document.getElementById('authLogoMobile');
@@ -252,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (logoUrl) {
                 logoHtml = `<img src="${logoUrl}" alt="Logo" style="height: 32px; object-fit: contain; margin-right: 8px;">`;
             }
-            logoMobile.innerHTML = `${logoHtml}<span>${brandText}</span>`;
+            logoMobile.innerHTML = `${logoHtml}${formatBrandText(brandText)}`;
         }
 
         // Update background gambar panel kiri

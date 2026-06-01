@@ -31,6 +31,150 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+    // Helper to format brand text to preserve 2-tone styling (second part wrapped in span)
+    const formatBrandText = (text) => {
+        if (!text) return '';
+        if (text.includes('<span>') || text.includes('<span') || text.includes('SPAN')) {
+            return text;
+        }
+        if (text.toLowerCase() === 'dinascustom.') {
+            return 'Dinas<span>Custom.</span>';
+        }
+        const spaceIdx = text.indexOf(' ');
+        if (spaceIdx !== -1) {
+            const first = text.substring(0, spaceIdx);
+            const rest = text.substring(spaceIdx);
+            return `${first}<span>${rest}</span>`;
+        }
+        const camelMatch = text.match(/^([A-Z][a-z0-9]+)([A-Z].*)$/);
+        if (camelMatch) {
+            return `${camelMatch[1]}<span>${camelMatch[2]}</span>`;
+        }
+        const half = Math.ceil(text.length / 2);
+        const first = text.substring(0, half);
+        const rest = text.substring(half);
+        return `${first}<span>${rest}</span>`;
+    };
+
+    const fallbacks = {
+        'Hero Title': 'Seragam Dinas Berkualitas,<br>Custom Sesuai Ukuran Anda.',
+        'Hero Subtitle': 'Tampil profesional dengan pakaian dinas (PDH, PDL) jahitan rapi dan bahan premium. Percayakan seragam Anda pada ahlinya.',
+        'Footer Brand': 'Dinas<span>Custom.</span>',
+        'Footer Description': 'Solusi pakaian dinas berkualitas, jahitan rapi, dan pelayanan profesional.',
+        'Footer WhatsApp': '+62 812-3456-7890',
+        'Footer Instagram': '@dinascustom',
+        'Footer Email': 'hello@dinascustom.com',
+        'Footer Copyright': '&copy; 2026 DinasCustom. All rights reserved.'
+    };
+
+    window.applyTampilanData = function(dataTampilan) {
+        dataTampilan = dataTampilan || {};
+        
+        // 1. Hero Background
+        const heroSection = document.getElementById('hero');
+        if (heroSection) {
+            if (dataTampilan['Hero Background']) {
+                heroSection.style.backgroundImage = `url('${dataTampilan['Hero Background']}')`;
+                heroSection.style.backgroundSize = 'cover';
+                heroSection.style.backgroundPosition = 'center';
+            } else {
+                heroSection.style.backgroundImage = ''; // resets to CSS default
+            }
+        }
+
+        // 2. Text elements with fallback
+        const setHtmlWithFallback = (id, key) => {
+            const el = document.getElementById(id);
+            if (el) {
+                if (dataTampilan[key] !== undefined && dataTampilan[key] !== null) {
+                    el.innerHTML = dataTampilan[key];
+                } else {
+                    el.innerHTML = fallbacks[key] || '';
+                }
+            }
+        };
+
+        setHtmlWithFallback('dynHeroTitle', 'Hero Title');
+        setHtmlWithFallback('dynHeroSubtitle', 'Hero Subtitle');
+        setHtmlWithFallback('dynFooterDesc', 'Footer Description');
+
+        // 3. Brand Logo Navbar & Footer
+        const navbarBrand = document.getElementById('dynNavbarBrand');
+        if (navbarBrand) {
+            let brandText = '';
+            if (dataTampilan['Footer Brand'] !== undefined && dataTampilan['Footer Brand'] !== null) {
+                brandText = dataTampilan['Footer Brand'];
+            } else {
+                brandText = fallbacks['Footer Brand'];
+            }
+            
+            const logoUrl = dataTampilan['Logo Brand'];
+            let logoHtml = '';
+            if (logoUrl) {
+                logoHtml = `<img id="dynNavbarLogo" src="${logoUrl}" alt="Logo" style="height: 38px; object-fit: contain; margin-right: 8px;">`;
+                
+                // Perbarui favicon global
+                let link = document.querySelector("link[rel~='icon']");
+                if (!link) {
+                    link = document.createElement('link');
+                    link.rel = 'icon';
+                    document.getElementsByTagName('head')[0].appendChild(link);
+                }
+                link.href = logoUrl;
+            }
+            navbarBrand.innerHTML = `${logoHtml}${brandText ? formatBrandText(brandText) : ''}`;
+        }
+
+        const footerBrand = document.getElementById('dynFooterBrand');
+        if (footerBrand) {
+            let brandText = '';
+            if (dataTampilan['Footer Brand'] !== undefined && dataTampilan['Footer Brand'] !== null) {
+                brandText = dataTampilan['Footer Brand'];
+            } else {
+                brandText = fallbacks['Footer Brand'];
+            }
+            footerBrand.innerHTML = brandText ? formatBrandText(brandText) : '';
+        }
+
+        // 4. Contact details (hide if explicitly empty)
+        const updateContactEl = (id, key, iconClass) => {
+            const el = document.getElementById(id);
+            if (el) {
+                let val = '';
+                if (dataTampilan[key] !== undefined && dataTampilan[key] !== null) {
+                    val = String(dataTampilan[key]).trim();
+                    if (val) {
+                        el.innerHTML = `<i class="${iconClass}"></i> ${val}`;
+                        el.style.display = '';
+                    } else {
+                        el.style.display = 'none';
+                    }
+                } else {
+                    val = fallbacks[key];
+                    el.innerHTML = `<i class="${iconClass}"></i> ${val}`;
+                    el.style.display = '';
+                }
+            }
+        };
+
+        updateContactEl('dynFooterWA', 'Footer WhatsApp', 'fa-brands fa-whatsapp');
+        updateContactEl('dynFooterIG', 'Footer Instagram', 'fa-brands fa-instagram');
+        updateContactEl('dynFooterEmail', 'Footer Email', 'fa-regular fa-envelope');
+
+        // 5. Copyright
+        const footerCopy = document.getElementById('dynFooterCopy');
+        if (footerCopy) {
+            if (dataTampilan['Footer Copyright'] !== undefined && dataTampilan['Footer Copyright'] !== null) {
+                footerCopy.innerHTML = dataTampilan['Footer Copyright'];
+            } else {
+                footerCopy.innerHTML = fallbacks['Footer Copyright'];
+            }
+        }
+    };
+
+    // Apply defaults immediately on load to prevent blank displays while waiting for GAS
+    window.applyTampilanData({});
+
     /* 
      ========================================
      1. Countdown Timer Logic
@@ -315,13 +459,13 @@ document.addEventListener('DOMContentLoaded', () => {
             initFilters();
 
             // 4. Render Klien / Instansi (Social Proof)
+            const clientsWrapper = document.getElementById('clientsWrapper');
             const klienContainer = document.getElementById('clientLogosContainer');
-            const sectionKlien = document.getElementById('social-proof');
             const dataKlien = data.data_klien || [];
 
             if (klienContainer) {
                 if (dataKlien.length > 0) {
-                    if (sectionKlien) sectionKlien.style.display = 'block';
+                    if (clientsWrapper) clientsWrapper.style.display = 'block';
                     klienContainer.innerHTML = '';
                     dataKlien.forEach(k => {
                         const namaInstansi = k['Nama Instansi'];
@@ -342,100 +486,61 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     });
                 } else {
-                    if (sectionKlien) sectionKlien.style.display = 'none';
+                    if (clientsWrapper) clientsWrapper.style.display = 'none';
                 }
             }
 
             // 5. Update Hero Background & Teks
-            const dataTampilan = data.data_tampilan || {};
-            if (dataTampilan['Hero Background']) {
-                const heroSection = document.getElementById('hero');
-                if (heroSection) {
-                    heroSection.style.backgroundImage = `url('${dataTampilan['Hero Background']}')`;
-                    heroSection.style.backgroundSize = 'cover';
-                    heroSection.style.backgroundPosition = 'center';
-                }
-            }
-            
-            const setHtmlIfExist = (id, key) => { 
-                if (dataTampilan[key]) {
-                    const el = document.getElementById(id);
-                    if (el) el.innerHTML = dataTampilan[key];
-                }
-            };
-            
-            setHtmlIfExist('dynHeroTitle', 'Hero Title');
-            setHtmlIfExist('dynHeroSubtitle', 'Hero Subtitle');
-            setHtmlIfExist('dynFooterBrand', 'Footer Brand');
-            
-            // Render dynNavbarBrand dengan logo (jika ada)
-            const navbarBrand = document.getElementById('dynNavbarBrand');
-            if (navbarBrand) {
-                const brandText = dataTampilan['Footer Brand'] || 'Dinas<span>Custom.</span>';
-                const logoUrl = dataTampilan['Logo Brand'];
-                let logoHtml = '';
-                if (logoUrl) {
-                    logoHtml = `<img id="dynNavbarLogo" src="${logoUrl}" alt="Logo" style="height: 38px; object-fit: contain; margin-right: 8px;">`;
-                    
-                    // Perbarui favicon global
-                    let link = document.querySelector("link[rel~='icon']");
-                    if (!link) {
-                        link = document.createElement('link');
-                        link.rel = 'icon';
-                        document.getElementsByTagName('head')[0].appendChild(link);
-                    }
-                    link.href = logoUrl;
-                }
-                navbarBrand.innerHTML = `${logoHtml}<span>${brandText}</span>`;
-            }
-            setHtmlIfExist('dynFooterDesc', 'Footer Description');
-            
-            if(dataTampilan['Footer WhatsApp']) {
-                const el = document.getElementById('dynFooterWA');
-                if(el) el.innerHTML = `<i class="fa-brands fa-whatsapp"></i> ${dataTampilan['Footer WhatsApp']}`;
-            }
-            if(dataTampilan['Footer Instagram']) {
-                const el = document.getElementById('dynFooterIG');
-                if(el) el.innerHTML = `<i class="fa-brands fa-instagram"></i> ${dataTampilan['Footer Instagram']}`;
-            }
-            if(dataTampilan['Footer Email']) {
-                const el = document.getElementById('dynFooterEmail');
-                if(el) el.innerHTML = `<i class="fa-regular fa-envelope"></i> ${dataTampilan['Footer Email']}`;
-            }
-            
-            setHtmlIfExist('dynFooterCopy', 'Footer Copyright');
+            window.applyTampilanData(data.data_tampilan);
             
             // 6. Render Testimoni Dinamik
+            const testimonialsWrapper = document.getElementById('testimonialsWrapper');
             const testimonialGrid = document.getElementById('testimonialGrid');
             const dataTestimoni = data.data_testimoni || [];
-            if (testimonialGrid && dataTestimoni.length > 0) {
-                testimonialGrid.innerHTML = '';
-                // Urutkan dari yang terbaru ke terlama
-                for (let i = dataTestimoni.length - 1; i >= 0; i--) {
-                    const row = dataTestimoni[i];
-                    const nama = row['Nama Lengkap'] || 'Pelanggan';
-                    const ulasan = row['Ulasan'] || '';
-                    const bintang = parseInt(row['Bintang']) || 5;
 
-                    let starsHtml = '';
-                    for (let s = 0; s < 5; s++) {
-                        if (s < bintang) {
-                            starsHtml += '<i class="fa-solid fa-star"></i>';
-                        } else {
-                            starsHtml += '<i class="fa-regular fa-star"></i>';
+            if (testimonialGrid) {
+                if (dataTestimoni.length > 0) {
+                    if (testimonialsWrapper) testimonialsWrapper.style.display = 'block';
+                    testimonialGrid.innerHTML = '';
+                    // Urutkan dari yang terbaru ke terlama
+                    for (let i = dataTestimoni.length - 1; i >= 0; i--) {
+                        const row = dataTestimoni[i];
+                        const nama = row['Nama Lengkap'] || 'Pelanggan';
+                        const ulasan = row['Ulasan'] || '';
+                        const bintang = parseInt(row['Bintang']) || 5;
+
+                        let starsHtml = '';
+                        for (let s = 0; s < 5; s++) {
+                            if (s < bintang) {
+                                starsHtml += '<i class="fa-solid fa-star"></i>';
+                            } else {
+                                starsHtml += '<i class="fa-regular fa-star"></i>';
+                            }
                         }
-                    }
 
-                    const card = document.createElement('div');
-                    card.className = 'testi-card';
-                    card.innerHTML = `
-                        <div style="color: #ffc107; margin-bottom: 8px; font-size: 0.9rem;">${starsHtml}</div>
-                        <p class="quote">"${ulasan}"</p>
-                        <div class="author">
-                            <strong>${nama}</strong>
-                        </div>
-                    `;
-                    testimonialGrid.appendChild(card);
+                        const card = document.createElement('div');
+                        card.className = 'testi-card';
+                        card.innerHTML = `
+                            <div style="color: #ffc107; margin-bottom: 8px; font-size: 0.9rem;">${starsHtml}</div>
+                            <p class="quote">"${ulasan}"</p>
+                            <div class="author">
+                                <strong>${nama}</strong>
+                            </div>
+                        `;
+                        testimonialGrid.appendChild(card);
+                    }
+                } else {
+                    if (testimonialsWrapper) testimonialsWrapper.style.display = 'none';
+                }
+            }
+
+            // Sembunyikan seluruh section social-proof jika kedua data kosong
+            const sectionSocialProof = document.getElementById('social-proof');
+            if (sectionSocialProof) {
+                if (dataKlien.length === 0 && dataTestimoni.length === 0) {
+                    sectionSocialProof.style.display = 'none';
+                } else {
+                    sectionSocialProof.style.display = 'block';
                 }
             }
 

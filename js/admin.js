@@ -351,6 +351,30 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
 
+                const formatBrandText = (text) => {
+                    if (!text) return '';
+                    if (text.includes('<span>') || text.includes('<span') || text.includes('SPAN')) {
+                        return text;
+                    }
+                    if (text.toLowerCase() === 'dinascustom.') {
+                        return 'Dinas<span>Custom.</span>';
+                    }
+                    const spaceIdx = text.indexOf(' ');
+                    if (spaceIdx !== -1) {
+                        const first = text.substring(0, spaceIdx);
+                        const rest = text.substring(spaceIdx);
+                        return `${first}<span>${rest}</span>`;
+                    }
+                    const camelMatch = text.match(/^([A-Z][a-z0-9]+)([A-Z].*)$/);
+                    if (camelMatch) {
+                        return `${camelMatch[1]}<span>${camelMatch[2]}</span>`;
+                    }
+                    const half = Math.ceil(text.length / 2);
+                    const first = text.substring(0, half);
+                    const rest = text.substring(half);
+                    return `${first}<span>${rest}</span>`;
+                };
+
                 // Perbarui logo brand di sidebar header
                 const adminBrand = document.getElementById('dynAdminBrand');
                 if (adminBrand) {
@@ -360,7 +384,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (logoUrl) {
                         logoHtml = `<img id="dynAdminLogo" src="${logoUrl}" alt="Logo" style="max-height: 32px; object-fit: contain; margin-right: 8px;">`;
                     }
-                    adminBrand.innerHTML = `${logoHtml}<span class="brand-text-wrapper">${brandText}</span>`;
+                    adminBrand.innerHTML = `${logoHtml}<span class="brand-text-wrapper">${formatBrandText(brandText)}</span>`;
                 }
 
                 // Perbarui favicon global

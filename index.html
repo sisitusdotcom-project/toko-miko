@@ -19,7 +19,7 @@
     <!-- Header / Navbar -->
     <header class="navbar">
         <div class="container nav-content">
-            <a href="#" class="logo" id="dynNavbarBrand">Dinas<span>Custom.</span></a>
+            <a href="#" class="logo" id="dynNavbarBrand"></a>
             <nav>
                 <ul class="nav-links" id="nav-links">
                     <li><a href="#hero">Beranda</a></li>
@@ -43,18 +43,18 @@
     <section id="hero" class="hero">
         <div class="hero-overlay"></div>
         <div class="container hero-content">
-            <h1 class="hero-title" id="dynHeroTitle">Seragam Dinas Berkualitas,<br>Custom Sesuai Ukuran Anda.</h1>
-            <p class="hero-subtitle" id="dynHeroSubtitle">Tampil profesional dengan pakaian dinas (PDH, PDL) jahitan rapi dan bahan premium. Percayakan seragam Anda pada ahlinya.</p>
+            <h1 class="hero-title" id="dynHeroTitle"></h1>
+            <p class="hero-subtitle" id="dynHeroSubtitle"></p>
             <div class="hero-actions">
                 <a href="login.html" class="btn btn-primary btn-lg">Mulai Pre-Order Sekarang</a>
                 <a href="#how-it-works" class="btn btn-outline btn-lg">Cara Kerja</a>
             </div>
             
             <!-- Event Diskon Berwaktu -->
-            <div class="discount-banner">
+            <div class="discount-banner" style="display: none;">
                 <div class="discount-info">
                     <i class="fa-solid fa-tags"></i>
-                    <span id="eventBannerText">Promo Spesial Batch #3</span>
+                    <span id="eventBannerText"></span>
                 </div>
                 <div class="countdown" id="countdown">
                     <div class="time-box"><span id="days">00</span><small>Hari</small></div>
@@ -126,27 +126,21 @@
     <!-- 5. Social Proof (Testimoni & Klien) -->
     <section id="social-proof" class="social-proof py-section bg-navy">
         <div class="container text-center">
-            <h2 class="section-title text-white">Dipercaya Oleh Berbagai Instansi</h2>
-            <p class="section-subtitle text-light-gray">Kami telah melayani pembuatan seragam dari berbagai instansi pemerintah dan swasta.</p>
-            
-            <div class="client-logos" id="clientLogosContainer">
-                <!-- Logos will be populated dynamically -->
+            <!-- Instansi/Klien Section -->
+            <div id="clientsWrapper">
+                <h2 class="section-title text-white">Dipercaya Oleh Berbagai Instansi</h2>
+                <p class="section-subtitle text-light-gray">Kami telah melayani pembuatan seragam dari berbagai instansi pemerintah dan swasta.</p>
+                <div class="client-logos" id="clientLogosContainer">
+                    <!-- Logos will be populated dynamically -->
+                </div>
             </div>
 
-            <div class="testimonial-grid mt-4" id="testimonialGrid">
-                <div class="testi-card">
-                    <div style="color: #ffc107; margin-bottom: 8px;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                    <p class="quote">"Jahitannya sangat rapi, bahannya adem dan ukurannya pas banget di badan. Proses PO juga transparan."</p>
-                    <div class="author">
-                        <strong>Bpk. Ahmad</strong>
-                    </div>
-                </div>
-                <div class="testi-card">
-                    <div style="color: #ffc107; margin-bottom: 8px;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                    <p class="quote">"Sangat puas dengan PDL yang dipesan. Kuat untuk dipakai di lapangan dan desainnya terlihat gagah."</p>
-                    <div class="author">
-                        <strong>Ibu Siti</strong>
-                    </div>
+            <!-- Testimoni Section -->
+            <div id="testimonialsWrapper" style="margin-top: 4rem;">
+                <h2 class="section-title text-white">Testimoni Pelanggan</h2>
+                <p class="section-subtitle text-light-gray" style="margin-bottom: 2rem;">Apa kata mereka yang telah memesan seragam dinas di toko kami.</p>
+                <div class="testimonial-grid" id="testimonialGrid">
+                    <!-- Testimonials will be populated dynamically -->
                 </div>
             </div>
         </div>
@@ -157,20 +151,20 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-brand">
-                    <h2 id="dynFooterBrand">Dinas<span>Custom.</span></h2>
-                    <p id="dynFooterDesc">Solusi pakaian dinas berkualitas, jahitan rapi, dan pelayanan profesional.</p>
+                    <h2 id="dynFooterBrand"></h2>
+                    <p id="dynFooterDesc"></p>
                 </div>
                 <div class="footer-links">
                     <h3>Kontak Kami</h3>
                     <ul>
-                        <li id="dynFooterWA"><i class="fa-brands fa-whatsapp"></i> +62 812-3456-7890</li>
-                        <li id="dynFooterIG"><i class="fa-brands fa-instagram"></i> @dinascustom</li>
-                        <li id="dynFooterEmail"><i class="fa-regular fa-envelope"></i> hello@dinascustom.com</li>
+                        <li id="dynFooterWA" style="display: none;"></li>
+                        <li id="dynFooterIG" style="display: none;"></li>
+                        <li id="dynFooterEmail" style="display: none;"></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p id="dynFooterCopy">&copy; 2026 DinasCustom. All rights reserved.</p>
+                <p id="dynFooterCopy"></p>
             </div>
         </div>
     </footer>
