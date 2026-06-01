@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (distance < 0) {
                 clearInterval(timerInterval);
-                document.getElementById("countdown").innerHTML = "<div class='time-box'><span>EXPIRED</span></div>";
+                document.getElementById("countdown").innerHTML = "<div class='time-box' style='padding: 10px 20px; min-width: auto; width: 100%;'><span style='font-size: 1.1rem; font-weight: 700; letter-spacing: 0.5px;'>PROMO SUDAH BERAKHIR</span></div>";
                 return;
             }
 
@@ -120,11 +120,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const navbar = document.querySelector('.navbar');
     window.addEventListener('scroll', () => {
         if (window.scrollY > 50) {
-            navbar.style.boxShadow = '0 2px 15px rgba(0,0,0,0.1)';
-            navbar.style.padding = '0';
+            navbar.classList.add('scrolled');
         } else {
-            navbar.style.boxShadow = '0 2px 10px rgba(0,0,0,0.05)';
-            navbar.style.padding = '5px 0';
+            navbar.classList.remove('scrolled');
         }
     });
 

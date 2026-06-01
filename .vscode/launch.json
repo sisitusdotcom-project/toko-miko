@@ -8,7 +8,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "Open index.html",
-            "file": "/home/mikubuntu/WEB PO BAJU DINAS/index.html"
+            "file": "${workspaceFolder}/index.html"
         }
     ]
 }
