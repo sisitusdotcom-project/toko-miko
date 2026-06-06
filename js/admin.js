@@ -2344,22 +2344,21 @@ window.playProductVideo = function(videoUrl) {
     const loadingIndicator = document.getElementById('videoPlayerLoading');
     if (!modal || !playerTarget) return;
     
-    // Reset/Tampilkan loading indicator
     if (loadingIndicator) loadingIndicator.style.display = 'flex';
     playerTarget.innerHTML = '';
     
-    let embedUrl = videoUrl;
-    let isGoogleDrive = false;
+    let isGoogleDrive = videoUrl.includes('drive.google.com');
+    let fileId = '';
     
-    if (videoUrl.includes('drive.google.com')) {
-        isGoogleDrive = true;
+    if (isGoogleDrive) {
         const match = videoUrl.match(/id=([^&]+)/) || videoUrl.match(/\/file\/d\/([^\/]+)/);
         if (match && match[1]) {
-            embedUrl = `https://drive.google.com/file/d/${match[1]}/preview`;
+            fileId = match[1];
         }
     }
     
-    if (isGoogleDrive) {
+    const playIframe = (embedUrl) => {
+        if (loadingIndicator) loadingIndicator.style.display = 'flex';
         playerTarget.innerHTML = `<iframe src="${embedUrl}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allow="autoplay" allowfullscreen></iframe>`;
         const iframe = playerTarget.querySelector('iframe');
         if (iframe) {
@@ -2367,8 +2366,47 @@ window.playProductVideo = function(videoUrl) {
                 if (loadingIndicator) loadingIndicator.style.display = 'none';
             });
         }
+    };
+    
+    if (isGoogleDrive && fileId) {
+        // Coba gunakan tag <video> dengan direct link terlebih dahulu untuk performa lancar di mobile (bebas lag)
+        const directUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+        playerTarget.innerHTML = `<video src="${directUrl}" controls autoplay style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; background: #000;"></video>`;
+        
+        const video = playerTarget.querySelector('video');
+        let fallbackTriggered = false;
+        
+        const triggerFallback = () => {
+            if (fallbackTriggered) return;
+            fallbackTriggered = true;
+            console.log('Direct video link failed or blocked by CORS. Falling back to iframe...');
+            const embedUrl = `https://drive.google.com/file/d/${fileId}/preview`;
+            playIframe(embedUrl);
+        };
+        
+        if (video) {
+            // Jika berhasil memuat data video, matikan loading dan tetap gunakan tag video
+            video.addEventListener('loadeddata', () => {
+                if (!fallbackTriggered) {
+                    if (loadingIndicator) loadingIndicator.style.display = 'none';
+                }
+            });
+            
+            // Jika error (misal CORS/CORP blocked atau butuh konfirmasi virus scan), beralih ke iframe
+            video.addEventListener('error', () => {
+                triggerFallback();
+            });
+            
+            // Timeout keamanan: jika dalam 3 detik video belum memuat data, fallback ke iframe
+            setTimeout(() => {
+                if (!fallbackTriggered && video.readyState < 2) {
+                    triggerFallback();
+                }
+            }, 3000);
+        }
     } else {
-        playerTarget.innerHTML = `<video src="${embedUrl}" controls autoplay style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; background: #000;"></video>`;
+        // Non-Google Drive (direct MP4)
+        playerTarget.innerHTML = `<video src="${videoUrl}" controls autoplay style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; background: #000;"></video>`;
         const video = playerTarget.querySelector('video');
         if (video) {
             video.addEventListener('loadeddata', () => {
