@@ -682,8 +682,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 window.playProductVideo = function(videoUrl) {
     const modal = document.getElementById('videoPreviewModal');
-    const playerContainer = document.getElementById('videoPreviewContainer');
-    if (!modal || !playerContainer) return;
+    const playerTarget = document.getElementById('videoPlayerTarget');
+    const loadingIndicator = document.getElementById('videoPlayerLoading');
+    if (!modal || !playerTarget) return;
+    
+    // Reset/Tampilkan loading indicator
+    if (loadingIndicator) loadingIndicator.style.display = 'flex';
+    playerTarget.innerHTML = '';
     
     let embedUrl = videoUrl;
     let isGoogleDrive = false;
@@ -697,9 +702,24 @@ window.playProductVideo = function(videoUrl) {
     }
     
     if (isGoogleDrive) {
-        playerContainer.innerHTML = `<iframe src="${embedUrl}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allow="autoplay" allowfullscreen></iframe>`;
+        playerTarget.innerHTML = `<iframe src="${embedUrl}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allow="autoplay" allowfullscreen></iframe>`;
+        const iframe = playerTarget.querySelector('iframe');
+        if (iframe) {
+            iframe.addEventListener('load', () => {
+                if (loadingIndicator) loadingIndicator.style.display = 'none';
+            });
+        }
     } else {
-        playerContainer.innerHTML = `<video src="${embedUrl}" controls autoplay style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; background: #000;"></video>`;
+        playerTarget.innerHTML = `<video src="${embedUrl}" controls autoplay style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; background: #000;"></video>`;
+        const video = playerTarget.querySelector('video');
+        if (video) {
+            video.addEventListener('loadeddata', () => {
+                if (loadingIndicator) loadingIndicator.style.display = 'none';
+            });
+            video.addEventListener('error', () => {
+                if (loadingIndicator) loadingIndicator.style.display = 'none';
+            });
+        }
     }
     
     modal.classList.add('show');
@@ -707,7 +727,7 @@ window.playProductVideo = function(videoUrl) {
 
 window.closeVideoPreviewModal = function() {
     const modal = document.getElementById('videoPreviewModal');
-    const playerContainer = document.getElementById('videoPreviewContainer');
-    if (playerContainer) playerContainer.innerHTML = '';
+    const playerTarget = document.getElementById('videoPlayerTarget');
+    if (playerTarget) playerTarget.innerHTML = '';
     if (modal) modal.classList.remove('show');
 };
