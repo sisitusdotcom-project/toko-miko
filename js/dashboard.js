@@ -239,8 +239,17 @@ document.addEventListener('DOMContentLoaded', () => {
             let eventDiskon = 0;
             const eventData = data.data_event;
             if (eventData && eventData['Status'] === 'Aktif') {
-                eventActive = true;
-                eventDiskon = parseInt(eventData['Diskon (%)'], 10) || 0;
+                let hasPassed = false;
+                if (eventData['Batas Waktu']) {
+                    const targetTime = new Date(eventData['Batas Waktu']).getTime();
+                    if (!isNaN(targetTime) && targetTime - Date.now() <= 0) {
+                        hasPassed = true;
+                    }
+                }
+                if (!hasPassed) {
+                    eventActive = true;
+                    eventDiskon = parseInt(eventData['Diskon (%)'], 10) || 0;
+                }
             }
             localStorage.setItem('eventActive', eventActive ? 'true' : 'false');
             localStorage.setItem('eventDiskon', eventDiskon.toString());
@@ -1706,17 +1715,20 @@ window.playProductVideo = function(videoUrl) {
     if (!modal || !playerContainer) return;
     
     let embedUrl = videoUrl;
-    if (videoUrl.includes('drive.google.com') && !videoUrl.includes('/preview') && !videoUrl.includes('export=view')) {
+    let isGoogleDrive = false;
+    
+    if (videoUrl.includes('drive.google.com')) {
+        isGoogleDrive = true;
         const match = videoUrl.match(/id=([^&]+)/) || videoUrl.match(/\/file\/d\/([^\/]+)/);
         if (match && match[1]) {
             embedUrl = `https://drive.google.com/file/d/${match[1]}/preview`;
         }
     }
     
-    if (embedUrl.includes('drive.google.com/file/d/') && embedUrl.includes('/preview')) {
-        playerContainer.innerHTML = `<iframe src="${embedUrl}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allow="autoplay"></iframe>`;
+    if (isGoogleDrive) {
+        playerContainer.innerHTML = `<iframe src="${embedUrl}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allow="autoplay" allowfullscreen></iframe>`;
     } else {
-        playerContainer.innerHTML = `<video src="${embedUrl}" controls autoplay style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"></video>`;
+        playerContainer.innerHTML = `<video src="${embedUrl}" controls autoplay style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; background: #000;"></video>`;
     }
     
     modal.classList.add('show');

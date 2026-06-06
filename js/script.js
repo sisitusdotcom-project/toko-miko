@@ -10,13 +10,37 @@ document.addEventListener('DOMContentLoaded', () => {
         window.history.replaceState({}, document.title, window.location.pathname);
     }
 
+    const getSyncUrl = (targetPage, role) => {
+        let url = targetPage;
+        if (window.location.protocol === 'file:') {
+            const email = localStorage.getItem('currentUserEmail') || '';
+            const name = localStorage.getItem('currentUserName') || '';
+            const whatsapp = localStorage.getItem('currentUserWhatsapp') || '';
+            url += `?role_sync=${role}&email_sync=${encodeURIComponent(email)}&name_sync=${encodeURIComponent(name)}`;
+            if (whatsapp) url += `&whatsapp_sync=${encodeURIComponent(whatsapp)}`;
+        }
+        return url;
+    };
+
     const userRole = localStorage.getItem('userRole');
     if (userRole) {
-        const authBtn = document.querySelector('a[href="login.html"]');
-        if (authBtn) {
-            authBtn.innerHTML = '<i class="fa-solid fa-house-user"></i> Dashboard';
-            authBtn.href = userRole === 'admin' ? 'admin.html' : 'dashboard.html';
+        const navbarAuthBtn = document.querySelector('.nav-actions a[href="login.html"]');
+        if (navbarAuthBtn) {
+            if (userRole === 'admin') {
+                navbarAuthBtn.innerHTML = '<i class="fa-solid fa-house-user"></i> Dashboard';
+                navbarAuthBtn.href = getSyncUrl('admin.html', 'admin');
+            } else {
+                navbarAuthBtn.innerHTML = '<i class="fa-solid fa-user"></i> Masuk';
+                navbarAuthBtn.href = getSyncUrl('dashboard.html', 'user');
+            }
         }
+        
+        // Update other links pointing to login.html to navigate to the correct page
+        document.querySelectorAll('a[href="login.html"]').forEach(btn => {
+            if (btn !== navbarAuthBtn) {
+                btn.href = getSyncUrl(userRole === 'admin' ? 'admin.html' : 'dashboard.html', userRole);
+            }
+        });
     } else {
         // Cek jika sedang tidak login, pastikan link login/register membawa logout_sync untuk membersihkan isolasi storage
         if (window.location.protocol === 'file:') {
@@ -137,29 +161,56 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // 4. Contact details (hide if explicitly empty)
-        const updateContactEl = (id, key, iconClass) => {
+        const updateContactEl = (id, key, linkKey, iconClass, defaultLinkPrefix) => {
             const el = document.getElementById(id);
             if (el) {
                 let val = '';
+                let linkVal = '';
                 if (dataTampilan[key] !== undefined && dataTampilan[key] !== null) {
                     val = String(dataTampilan[key]).trim();
+                    linkVal = dataTampilan[linkKey] ? String(dataTampilan[linkKey]).trim() : '';
                     if (val) {
-                        el.innerHTML = `<i class="${iconClass}"></i> ${val}`;
+                        if (linkVal) {
+                            el.innerHTML = `<a href="${linkVal}" target="_blank"><i class="${iconClass}"></i> ${val}</a>`;
+                        } else {
+                            // Fallback if link is not specified but text exists
+                            let fallbackLink = '#';
+                            if (defaultLinkPrefix === 'wa' && val) {
+                                const cleanNum = val.replace(/[^0-9]/g, '');
+                                fallbackLink = `https://wa.me/${cleanNum}`;
+                            } else if (defaultLinkPrefix === 'ig' && val) {
+                                const cleanIg = val.replace('@', '');
+                                fallbackLink = `https://instagram.com/${cleanIg}`;
+                            } else if (defaultLinkPrefix === 'email' && val) {
+                                fallbackLink = `mailto:${val}`;
+                            }
+                            el.innerHTML = `<a href="${fallbackLink}" target="_blank"><i class="${iconClass}"></i> ${val}</a>`;
+                        }
                         el.style.display = '';
                     } else {
                         el.style.display = 'none';
                     }
                 } else {
                     val = fallbacks[key];
-                    el.innerHTML = `<i class="${iconClass}"></i> ${val}`;
+                    let fallbackLink = '#';
+                    if (defaultLinkPrefix === 'wa' && val) {
+                        const cleanNum = val.replace(/[^0-9]/g, '');
+                        fallbackLink = `https://wa.me/${cleanNum}`;
+                    } else if (defaultLinkPrefix === 'ig' && val) {
+                        const cleanIg = val.replace('@', '');
+                        fallbackLink = `https://instagram.com/${cleanIg}`;
+                    } else if (defaultLinkPrefix === 'email' && val) {
+                        fallbackLink = `mailto:${val}`;
+                    }
+                    el.innerHTML = `<a href="${fallbackLink}" target="_blank"><i class="${iconClass}"></i> ${val}</a>`;
                     el.style.display = '';
                 }
             }
         };
 
-        updateContactEl('dynFooterWA', 'Footer WhatsApp', 'fa-brands fa-whatsapp');
-        updateContactEl('dynFooterIG', 'Footer Instagram', 'fa-brands fa-instagram');
-        updateContactEl('dynFooterEmail', 'Footer Email', 'fa-regular fa-envelope');
+        updateContactEl('dynFooterWA', 'Footer WhatsApp', 'Footer WhatsApp Link', 'fa-brands fa-whatsapp', 'wa');
+        updateContactEl('dynFooterIG', 'Footer Instagram', 'Footer Instagram Link', 'fa-brands fa-instagram', 'ig');
+        updateContactEl('dynFooterEmail', 'Footer Email', 'Footer Email Link', 'fa-regular fa-envelope', 'email');
 
         // 5. Copyright
         const footerCopy = document.getElementById('dynFooterCopy');
@@ -205,6 +256,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (distance < 0) {
                 clearInterval(timerInterval);
                 document.getElementById("countdown").innerHTML = "<div class='time-box' style='padding: 10px 20px; min-width: auto; width: 100%;'><span style='font-size: 1.1rem; font-weight: 700; letter-spacing: 0.5px;'>PROMO SUDAH BERAKHIR</span></div>";
+                if (window.latestCatalogData) {
+                    handleCatalogData(window.latestCatalogData);
+                }
                 return;
             }
 
@@ -349,6 +403,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const grid = document.getElementById('productGrid');
         if (!grid) return;
 
+        // Simpan data katalog terbaru agar bisa digunakan saat timer berakhir
+        window.latestCatalogData = data;
+
         if (data.result === 'success') {
             const products = data.data_produk || [];
             if (products.length === 0) {
@@ -363,14 +420,32 @@ document.addEventListener('DOMContentLoaded', () => {
             const banner = document.querySelector('.discount-banner');
             
             if (eventData && eventData['Status'] === 'Aktif') {
-                eventActive = true;
-                eventDiskon = parseInt(eventData['Diskon (%)'], 10) || 0;
-                const bannerText = document.getElementById('eventBannerText');
-                if (bannerText) bannerText.innerText = eventData['Nama Event'] || 'Promo Spesial';
-                if (banner) banner.style.display = 'inline-flex';
-                window.startCountdown(eventData['Batas Waktu']);
+                let hasPassed = false;
+                if (eventData['Batas Waktu']) {
+                    const targetTime = new Date(eventData['Batas Waktu']).getTime();
+                    if (!isNaN(targetTime) && targetTime - Date.now() <= 0) {
+                        hasPassed = true;
+                    }
+                }
+
+                if (!hasPassed) {
+                    eventActive = true;
+                    eventDiskon = parseInt(eventData['Diskon (%)'], 10) || 0;
+                    const bannerText = document.getElementById('eventBannerText');
+                    if (bannerText) bannerText.innerText = eventData['Nama Event'] || 'Promo Spesial';
+                    if (banner) banner.style.display = 'inline-flex';
+                    window.startCountdown(eventData['Batas Waktu']);
+                } else {
+                    if (banner) banner.style.display = 'none';
+                    if (timerInterval) clearInterval(timerInterval);
+                    const countdownEl = document.getElementById("countdown");
+                    if (countdownEl) {
+                        countdownEl.innerHTML = "<div class='time-box' style='padding: 10px 20px; min-width: auto; width: 100%;'><span style='font-size: 1.1rem; font-weight: 700; letter-spacing: 0.5px;'>PROMO SUDAH BERAKHIR</span></div>";
+                    }
+                }
             } else {
                 if (banner) banner.style.display = 'none';
+                if (timerInterval) clearInterval(timerInterval);
             }
 
             // 2. Render Produk
@@ -474,13 +549,12 @@ document.addEventListener('DOMContentLoaded', () => {
                             const div = document.createElement('div');
                             div.className = 'logo-box';
                             if (urlGambar) {
-                                div.innerHTML = `<img src="${urlGambar}" alt="${namaInstansi}" style="max-height: 50px; max-width: 150px; border-radius: 4px; object-fit: contain;">`;
-                                div.style.padding = "5px";
-                                div.style.background = "transparent";
-                                div.style.border = "none";
-                                div.title = namaInstansi;
+                                div.innerHTML = `
+                                    <img src="${urlGambar}" alt="${namaInstansi}">
+                                    <span class="client-name">${namaInstansi}</span>
+                                `;
                             } else {
-                                div.innerText = namaInstansi;
+                                div.innerHTML = `<span class="client-name" style="font-size: 1rem; color: var(--white); font-weight: 600;">${namaInstansi}</span>`;
                             }
                             klienContainer.appendChild(div);
                         }
@@ -612,17 +686,20 @@ window.playProductVideo = function(videoUrl) {
     if (!modal || !playerContainer) return;
     
     let embedUrl = videoUrl;
-    if (videoUrl.includes('drive.google.com') && !videoUrl.includes('/preview') && !videoUrl.includes('export=view')) {
+    let isGoogleDrive = false;
+    
+    if (videoUrl.includes('drive.google.com')) {
+        isGoogleDrive = true;
         const match = videoUrl.match(/id=([^&]+)/) || videoUrl.match(/\/file\/d\/([^\/]+)/);
         if (match && match[1]) {
             embedUrl = `https://drive.google.com/file/d/${match[1]}/preview`;
         }
     }
     
-    if (embedUrl.includes('drive.google.com/file/d/') && embedUrl.includes('/preview')) {
-        playerContainer.innerHTML = `<iframe src="${embedUrl}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allow="autoplay"></iframe>`;
+    if (isGoogleDrive) {
+        playerContainer.innerHTML = `<iframe src="${embedUrl}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allow="autoplay" allowfullscreen></iframe>`;
     } else {
-        playerContainer.innerHTML = `<video src="${embedUrl}" controls autoplay style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"></video>`;
+        playerContainer.innerHTML = `<video src="${embedUrl}" controls autoplay style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; background: #000;"></video>`;
     }
     
     modal.classList.add('show');

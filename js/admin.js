@@ -406,8 +406,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     setVal('teksFooterBrand', 'Footer Brand');
                     setVal('teksFooterDesc', 'Footer Description');
                     setVal('teksFooterWA', 'Footer WhatsApp');
+                    setVal('teksFooterWALink', 'Footer WhatsApp Link');
                     setVal('teksFooterIG', 'Footer Instagram');
+                    setVal('teksFooterIGLink', 'Footer Instagram Link');
                     setVal('teksFooterEmail', 'Footer Email');
+                    setVal('teksFooterEmailLink', 'Footer Email Link');
                     setVal('teksFooterCopy', 'Footer Copyright');
                 }
             }
@@ -1395,8 +1398,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 'Footer Brand': document.getElementById('teksFooterBrand').value,
                 'Footer Description': document.getElementById('teksFooterDesc').value,
                 'Footer WhatsApp': document.getElementById('teksFooterWA').value,
+                'Footer WhatsApp Link': document.getElementById('teksFooterWALink').value,
                 'Footer Instagram': document.getElementById('teksFooterIG').value,
+                'Footer Instagram Link': document.getElementById('teksFooterIGLink').value,
                 'Footer Email': document.getElementById('teksFooterEmail').value,
+                'Footer Email Link': document.getElementById('teksFooterEmailLink').value,
                 'Footer Copyright': document.getElementById('teksFooterCopy').value
             };
 
@@ -2338,17 +2344,20 @@ window.playProductVideo = function(videoUrl) {
     if (!modal || !playerContainer) return;
     
     let embedUrl = videoUrl;
-    if (videoUrl.includes('drive.google.com') && !videoUrl.includes('/preview') && !videoUrl.includes('export=view')) {
+    let isGoogleDrive = false;
+    
+    if (videoUrl.includes('drive.google.com')) {
+        isGoogleDrive = true;
         const match = videoUrl.match(/id=([^&]+)/) || videoUrl.match(/\/file\/d\/([^\/]+)/);
         if (match && match[1]) {
             embedUrl = `https://drive.google.com/file/d/${match[1]}/preview`;
         }
     }
     
-    if (embedUrl.includes('drive.google.com/file/d/') && embedUrl.includes('/preview')) {
-        playerContainer.innerHTML = `<iframe src="${embedUrl}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allow="autoplay"></iframe>`;
+    if (isGoogleDrive) {
+        playerContainer.innerHTML = `<iframe src="${embedUrl}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allow="autoplay" allowfullscreen></iframe>`;
     } else {
-        playerContainer.innerHTML = `<video src="${embedUrl}" controls autoplay style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"></video>`;
+        playerContainer.innerHTML = `<video src="${embedUrl}" controls autoplay style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; background: #000;"></video>`;
     }
     
     modal.classList.add('show');
