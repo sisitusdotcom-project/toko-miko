@@ -1730,7 +1730,7 @@ window.playProductVideo = function(videoUrl) {
     
     const playIframe = (embedUrl) => {
         if (loadingIndicator) loadingIndicator.style.display = 'flex';
-        playerTarget.innerHTML = `<iframe src="${embedUrl}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allow="autoplay" allowfullscreen></iframe>`;
+        playerTarget.innerHTML = `<iframe src="${embedUrl}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; background: #000;" allow="autoplay" allowfullscreen></iframe>`;
         const iframe = playerTarget.querySelector('iframe');
         if (iframe) {
             iframe.addEventListener('load', () => {
