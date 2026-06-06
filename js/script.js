@@ -713,7 +713,7 @@ window.playProductVideo = function(videoUrl) {
     if (isGoogleDrive && fileId) {
         // Coba gunakan tag <video> dengan direct link terlebih dahulu untuk performa lancar di mobile (bebas lag)
         const directUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
-        playerTarget.innerHTML = `<video src="${directUrl}" controls autoplay style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; background: #000;"></video>`;
+        playerTarget.innerHTML = `<video src="${directUrl}" controls autoplay style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; background: #000; object-fit: contain;"></video>`;
         
         const video = playerTarget.querySelector('video');
         let fallbackTriggered = false;
@@ -748,7 +748,7 @@ window.playProductVideo = function(videoUrl) {
         }
     } else {
         // Non-Google Drive (direct MP4)
-        playerTarget.innerHTML = `<video src="${videoUrl}" controls autoplay style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; background: #000;"></video>`;
+        playerTarget.innerHTML = `<video src="${videoUrl}" controls autoplay style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; background: #000; object-fit: contain;"></video>`;
         const video = playerTarget.querySelector('video');
         if (video) {
             video.addEventListener('loadeddata', () => {
