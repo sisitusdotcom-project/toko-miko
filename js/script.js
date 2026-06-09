@@ -508,9 +508,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             <h3>${p['Nama Produk'] || 'Produk'}</h3>
                             ${priceHtml}
                             ${p['URL Video'] ? `
-                            <button class="btn btn-outline-primary btn-sm btn-video-preview" onclick="playProductVideo('${p['URL Video']}')" style="margin-top: 10px; width: 100%; border-radius: 20px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: inherit; font-size: 0.85rem; padding: 6px 12px; cursor: pointer; border: 1px solid var(--primary-color); background: transparent; color: var(--primary-color); transition: var(--transition);">
+                            <a href="${p['URL Video']}" target="_blank" class="btn btn-outline-primary btn-sm btn-video-preview" style="margin-top: 10px; width: 100%; border-radius: 20px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: inherit; font-size: 0.85rem; padding: 6px 12px; cursor: pointer; border: 1px solid var(--primary-color); background: transparent; color: var(--primary-color); transition: var(--transition); text-decoration: none;">
                                 <i class="fa-solid fa-circle-play"></i> Lihat Video
-                            </button>
+                            </a>
                             ` : ''}
                         </div>
                     </div>
@@ -680,92 +680,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-window.playProductVideo = function(videoUrl) {
-    const modal = document.getElementById('videoPreviewModal');
-    const playerTarget = document.getElementById('videoPlayerTarget');
-    const loadingIndicator = document.getElementById('videoPlayerLoading');
-    if (!modal || !playerTarget) return;
-    
-    if (loadingIndicator) loadingIndicator.style.display = 'flex';
-    playerTarget.innerHTML = '';
-    
-    let isGoogleDrive = videoUrl.includes('drive.google.com');
-    let fileId = '';
-    
-    if (isGoogleDrive) {
-        const match = videoUrl.match(/id=([^&]+)/) || videoUrl.match(/\/file\/d\/([^\/]+)/);
-        if (match && match[1]) {
-            fileId = match[1];
-        }
-    }
-    
-    const playIframe = (embedUrl) => {
-        if (loadingIndicator) loadingIndicator.style.display = 'flex';
-        playerTarget.innerHTML = `<iframe src="${embedUrl}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; background: #000;" allow="autoplay" allowfullscreen></iframe>`;
-        const iframe = playerTarget.querySelector('iframe');
-        if (iframe) {
-            iframe.addEventListener('load', () => {
-                if (loadingIndicator) loadingIndicator.style.display = 'none';
-            });
-        }
-    };
-    
-    if (isGoogleDrive && fileId) {
-        // Coba gunakan tag <video> dengan direct link terlebih dahulu untuk performa lancar di mobile (bebas lag)
-        const directUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
-        playerTarget.innerHTML = `<video src="${directUrl}" controls autoplay style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; background: #000; object-fit: contain;"></video>`;
-        
-        const video = playerTarget.querySelector('video');
-        let fallbackTriggered = false;
-        
-        const triggerFallback = () => {
-            if (fallbackTriggered) return;
-            fallbackTriggered = true;
-            console.log('Direct video link failed or blocked by CORS. Falling back to iframe...');
-            const embedUrl = `https://drive.google.com/file/d/${fileId}/preview`;
-            playIframe(embedUrl);
-        };
-        
-        if (video) {
-            // Jika berhasil memuat data video, matikan loading dan tetap gunakan tag video
-            video.addEventListener('loadeddata', () => {
-                if (!fallbackTriggered) {
-                    if (loadingIndicator) loadingIndicator.style.display = 'none';
-                }
-            });
-            
-            // Jika error (misal CORS/CORP blocked atau butuh konfirmasi virus scan), beralih ke iframe
-            video.addEventListener('error', () => {
-                triggerFallback();
-            });
-            
-            // Timeout keamanan: jika dalam 3 detik video belum memuat data, fallback ke iframe
-            setTimeout(() => {
-                if (!fallbackTriggered && video.readyState < 2) {
-                    triggerFallback();
-                }
-            }, 3000);
-        }
-    } else {
-        // Non-Google Drive (direct MP4)
-        playerTarget.innerHTML = `<video src="${videoUrl}" controls autoplay style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; background: #000; object-fit: contain;"></video>`;
-        const video = playerTarget.querySelector('video');
-        if (video) {
-            video.addEventListener('loadeddata', () => {
-                if (loadingIndicator) loadingIndicator.style.display = 'none';
-            });
-            video.addEventListener('error', () => {
-                if (loadingIndicator) loadingIndicator.style.display = 'none';
-            });
-        }
-    }
-    
-    modal.classList.add('show');
-};
 
-window.closeVideoPreviewModal = function() {
-    const modal = document.getElementById('videoPreviewModal');
-    const playerTarget = document.getElementById('videoPlayerTarget');
-    if (playerTarget) playerTarget.innerHTML = '';
-    if (modal) modal.classList.remove('show');
-};
