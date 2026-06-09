@@ -2002,7 +2002,10 @@ window.editProduct = function(productId) {
             videoPreviewText.textContent = "Ada video terupload";
             videoPreviewLink.href = videoUrl;
             videoPreviewLink.style.display = "inline-block";
-            videoPreviewLink.onclick = null;
+            videoPreviewLink.onclick = (e) => {
+                e.preventDefault();
+                if (window.playProductVideo) window.playProductVideo(videoUrl);
+            };
         } else {
             videoPreviewText.textContent = "Tidak ada video";
             videoPreviewLink.href = "#";
@@ -2333,5 +2336,36 @@ window.hapusTestimoni = function(timestamp, nama, ulasan) {
             alert('Terjadi kesalahan jaringan.');
         });
     });
+};
+
+window.playProductVideo = function(videoUrl) {
+    const modal = document.getElementById('videoPreviewModal');
+    const player = document.getElementById('nativeVideoPlayer');
+    if (!modal || !player) return;
+    
+    let playUrl = videoUrl;
+    if (videoUrl.includes('drive.google.com')) {
+        const match = videoUrl.match(/id=([^&]+)/) || videoUrl.match(/\/file\/d\/([^\/]+)/);
+        if (match && match[1]) {
+            playUrl = `https://drive.google.com/uc?export=download&id=${match[1]}`;
+        }
+    }
+    
+    player.src = playUrl;
+    player.load();
+    modal.classList.add('show');
+    player.play().catch(err => console.log('Autoplay blocked:', err));
+};
+
+window.closeVideoPreviewModal = function() {
+    const modal = document.getElementById('videoPreviewModal');
+    const player = document.getElementById('nativeVideoPlayer');
+    if (player) {
+        player.pause();
+        player.src = '';
+    }
+    if (modal) {
+        modal.classList.remove('show');
+    }
 };
 

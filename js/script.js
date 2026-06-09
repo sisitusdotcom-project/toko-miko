@@ -498,14 +498,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
 
-                let videoUrl = p['URL Video'] || '';
-                if (videoUrl.includes('drive.google.com')) {
-                    const match = videoUrl.match(/id=([^&]+)/) || videoUrl.match(/\/file\/d\/([^\/]+)/);
-                    if (match && match[1]) {
-                        videoUrl = `https://drive.google.com/file/d/${match[1]}/preview`;
-                    }
-                }
-
                 const cardHtml = `
                     <div class="product-card" data-category="${cat}">
                         <div class="product-img-wrap">
@@ -515,10 +507,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="product-info">
                             <h3>${p['Nama Produk'] || 'Produk'}</h3>
                             ${priceHtml}
-                            ${videoUrl ? `
-                            <a href="${videoUrl}" target="_blank" class="btn btn-outline-primary btn-sm btn-video-preview" style="margin-top: 10px; width: 100%; border-radius: 20px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: inherit; font-size: 0.85rem; padding: 6px 12px; cursor: pointer; border: 1px solid var(--primary-color); background: transparent; color: var(--primary-color); transition: var(--transition); text-decoration: none;">
+                            ${p['URL Video'] ? `
+                            <button class="btn btn-outline-primary btn-sm btn-video-preview" onclick="playProductVideo('${p['URL Video']}')" style="margin-top: 10px; width: 100%; border-radius: 20px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: inherit; font-size: 0.85rem; padding: 6px 12px; cursor: pointer; border: 1px solid var(--primary-color); background: transparent; color: var(--primary-color); transition: var(--transition);">
                                 <i class="fa-solid fa-circle-play"></i> Lihat Video
-                            </a>
+                            </button>
                             ` : ''}
                         </div>
                     </div>
@@ -687,5 +679,36 @@ document.addEventListener('DOMContentLoaded', () => {
     loadProducts();
 
 });
+
+window.playProductVideo = function(videoUrl) {
+    const modal = document.getElementById('videoPreviewModal');
+    const player = document.getElementById('nativeVideoPlayer');
+    if (!modal || !player) return;
+    
+    let playUrl = videoUrl;
+    if (videoUrl.includes('drive.google.com')) {
+        const match = videoUrl.match(/id=([^&]+)/) || videoUrl.match(/\/file\/d\/([^\/]+)/);
+        if (match && match[1]) {
+            playUrl = `https://drive.google.com/uc?export=download&id=${match[1]}`;
+        }
+    }
+    
+    player.src = playUrl;
+    player.load();
+    modal.classList.add('show');
+    player.play().catch(err => console.log('Autoplay blocked:', err));
+};
+
+window.closeVideoPreviewModal = function() {
+    const modal = document.getElementById('videoPreviewModal');
+    const player = document.getElementById('nativeVideoPlayer');
+    if (player) {
+        player.pause();
+        player.src = '';
+    }
+    if (modal) {
+        modal.classList.remove('show');
+    }
+};
 
 

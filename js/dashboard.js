@@ -1159,14 +1159,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            let videoUrl = p['URL Video'] || '';
-            if (videoUrl.includes('drive.google.com')) {
-                const match = videoUrl.match(/id=([^&]+)/) || videoUrl.match(/\/file\/d\/([^\/]+)/);
-                if (match && match[1]) {
-                    videoUrl = `https://drive.google.com/file/d/${match[1]}/preview`;
-                }
-            }
-
             const cardHtml = `
                 <div class="product-card" data-category="${cat}" style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; transition: var(--transition); height: 100%;">
                     <div class="product-img-wrap" style="position: relative; overflow: hidden; aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; background: #f9fafb;">
@@ -1182,10 +1174,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             <button class="btn btn-primary btn-block btn-add-to-cart" data-id="${p['ID Produk']}" data-nama="${p['Nama Produk']}" data-kategori="${p['Kategori']}" data-harga="${finalHargaInt}" data-image="${imageUrl}" data-ukuran="${p['Ukuran'] || ''}" style="margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.9rem; width: 100%;">
                                 <i class="fa-solid fa-cart-plus"></i> Tambah ke Keranjang
                             </button>
-                            ${videoUrl ? `
-                            <a href="${videoUrl}" target="_blank" class="btn btn-outline-primary btn-block btn-video-preview" style="margin-top: 5px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.9rem; width: 100%; border: 1px solid var(--primary-color); background: transparent; color: var(--primary-color); padding: 8px; border-radius: 8px; font-weight: 600; cursor: pointer; text-decoration: none; box-sizing: border-box;">
+                            ${p['URL Video'] ? `
+                            <button class="btn btn-outline-primary btn-block btn-video-preview" onclick="playProductVideo('${p['URL Video']}')" style="margin-top: 5px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.9rem; width: 100%; border: 1px solid var(--primary-color); background: transparent; color: var(--primary-color); padding: 8px; border-radius: 8px; font-weight: 600; cursor: pointer; box-sizing: border-box;">
                                 <i class="fa-solid fa-circle-play"></i> Lihat Video
-                            </a>
+                            </button>
                             ` : ''}
                         </div>
                     </div>
@@ -1716,4 +1708,35 @@ function copyToClipboard(elementId) {
         }, 2000);
     }
 }
+
+window.playProductVideo = function(videoUrl) {
+    const modal = document.getElementById('videoPreviewModal');
+    const player = document.getElementById('nativeVideoPlayer');
+    if (!modal || !player) return;
+    
+    let playUrl = videoUrl;
+    if (videoUrl.includes('drive.google.com')) {
+        const match = videoUrl.match(/id=([^&]+)/) || videoUrl.match(/\/file\/d\/([^\/]+)/);
+        if (match && match[1]) {
+            playUrl = `https://drive.google.com/uc?export=download&id=${match[1]}`;
+        }
+    }
+    
+    player.src = playUrl;
+    player.load();
+    modal.classList.add('show');
+    player.play().catch(err => console.log('Autoplay blocked:', err));
+};
+
+window.closeVideoPreviewModal = function() {
+    const modal = document.getElementById('videoPreviewModal');
+    const player = document.getElementById('nativeVideoPlayer');
+    if (player) {
+        player.pause();
+        player.src = '';
+    }
+    if (modal) {
+        modal.classList.remove('show');
+    }
+};
 
