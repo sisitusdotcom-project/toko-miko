@@ -498,6 +498,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
 
+                let videoUrl = p['URL Video'] || '';
+                if (videoUrl.includes('drive.google.com')) {
+                    const match = videoUrl.match(/id=([^&]+)/) || videoUrl.match(/\/file\/d\/([^\/]+)/);
+                    if (match && match[1]) {
+                        videoUrl = `https://drive.google.com/file/d/${match[1]}/preview`;
+                    }
+                }
+
                 const cardHtml = `
                     <div class="product-card" data-category="${cat}">
                         <div class="product-img-wrap">
@@ -507,8 +515,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="product-info">
                             <h3>${p['Nama Produk'] || 'Produk'}</h3>
                             ${priceHtml}
-                            ${p['URL Video'] ? `
-                            <a href="${p['URL Video']}" target="_blank" class="btn btn-outline-primary btn-sm btn-video-preview" style="margin-top: 10px; width: 100%; border-radius: 20px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: inherit; font-size: 0.85rem; padding: 6px 12px; cursor: pointer; border: 1px solid var(--primary-color); background: transparent; color: var(--primary-color); transition: var(--transition); text-decoration: none;">
+                            ${videoUrl ? `
+                            <a href="${videoUrl}" target="_blank" class="btn btn-outline-primary btn-sm btn-video-preview" style="margin-top: 10px; width: 100%; border-radius: 20px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: inherit; font-size: 0.85rem; padding: 6px 12px; cursor: pointer; border: 1px solid var(--primary-color); background: transparent; color: var(--primary-color); transition: var(--transition); text-decoration: none;">
                                 <i class="fa-solid fa-circle-play"></i> Lihat Video
                             </a>
                             ` : ''}
